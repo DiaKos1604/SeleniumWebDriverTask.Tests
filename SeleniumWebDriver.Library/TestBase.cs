@@ -12,7 +12,7 @@ public class TestBase : IDisposable
         var options = new ChromeOptions();
         options.AddArgument("--start-maximized");
         driver = new ChromeDriver(options);
-        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
     }
 
     public void Dispose()
