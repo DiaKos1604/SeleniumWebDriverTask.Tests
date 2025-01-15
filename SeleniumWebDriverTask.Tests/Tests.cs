@@ -1,88 +1,89 @@
 using OpenQA.Selenium;
-using SeleniumExtras.WaitHelpers;
+using SeleniumWebDriver.Library.Pages;
+using TasksWebDriver.Pages;
 
 namespace SeleniumWebDriverTask.Tests
 {
     public class Tests
     {
-        public class AutomatedTests : TestBase, IDisposable
+        public class AutomatedTests : WebDriverManager, IDisposable
         {
+            private IWebDriver driver;
+
+            public AutomatedTests()
+            {
+                driver = WebDriverManager.GetWebDriver();
+            }
+
+            private HomePage HomePage => new HomePage(driver, TimeSpan.FromSeconds(20));
+            private CareersPage CareersPage => new CareersPage(driver, TimeSpan.FromSeconds(20));
+            private MagnifierIconPage MagnifierIconPage => new MagnifierIconPage(driver, TimeSpan.FromSeconds(20));
+            private AboutPage AboutPage => new AboutPage(driver, TimeSpan.FromSeconds(20));
+            private InsightsPage InsightsPage => new InsightsPage(driver, TimeSpan.FromSeconds(20));
+
+            [Fact]
+            public void ValidateHomePage()
+            {
+                HomePage.GoTo();
+                HomePage.ValidateNavigationElementsExist();
+            }
 
             [Theory]
             [InlineData("C#")]
-            public void TestCase1(string programingLanguage)
+            public void ValidateJobSearch(string programmingLanguage)
             {
-                driver.Navigate().GoToUrl("https://www.epam.com/");
+                HomePage.GoTo();
+                HomePage.ClickCareersLink();
 
-                var careersLink = driver.FindElement(By.LinkText("Careers"));
-                careersLink.Click();
+                CareersPage.SearchJob(programmingLanguage);
+                CareersPage.GetDateLabel();
+                CareersPage.GetViewAndApplyButtonForLatestob();
 
-                var findJobLink = driver.FindElement(By.PartialLinkText("Find Your"));
-                findJobLink.Click();
-
-
-                var cookieButton = wait.Until(d => d.FindElement(By.Id("onetrust-accept-btn-handler")));
-                cookieButton.Click();
-
-                var keywordsField = driver.FindElement(By.Id(("new_form_job_search-keyword")));
-                keywordsField.Clear();
-                keywordsField.SendKeys(programingLanguage);
-
-                var locationField = driver.FindElement(By.ClassName(("select2-selection__rendered")));
-                locationField.Click();
-                var choiceLocation = driver.FindElement(By.CssSelector("li.select2-results__option"));
-                choiceLocation.Click();
-
-                var remoteOption = driver.FindElement(By.XPath("//label[@for='id-e5369b1e-5de0-3bf9-b805-e8ab3dc54483-remote']"));
-                remoteOption.Click();
-
-                var findButton = wait.Until(d => d.FindElement(By.XPath("//button[contains(normalize-space(text()), 'Find')]")));
-                findButton.Click();
-                Thread.Sleep(2000);
-
-                IWebElement GetViewAndApplyButtonForLatestob = wait.Until(d => d.FindElement(By.XPath("//ul[@class='search-result__list']/li[position()=1]/descendant::a[text()='View and apply']")));
-                IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-                js.ExecuteScript("arguments[0].scrollIntoView(true);", GetViewAndApplyButtonForLatestob);
-
-                var programmingLangElement = driver.FindElement(By.XPath($"//*[contains(text(), '{programingLanguage}')]"));
-                Assert.NotNull(programmingLangElement);
-
+                var programingLangElement = CareersPage.IsProgrammingLangElementDisplayed(programmingLanguage);
+                Assert.True(programingLangElement, $"Programming language {programmingLanguage} is not found");
             }
 
             [Theory]
             [InlineData("Cloud")]
-            public void TestCase2(string searchTerm)
+            public void ValidateMagnifierIcon(string searchTerm)
             {
-                driver.Navigate().GoToUrl("https://www.epam.com/");
+                HomePage.GoTo();
+                MagnifierIconPage.Search(searchTerm);
 
-               
-                var magnifierIcon = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("header-search__button")));
-                wait.Until(d => magnifierIcon.Displayed && magnifierIcon.Enabled);
-                magnifierIcon.Click();
-
-                var searchInput = wait.Until(d => d.FindElement(By.Name("q")));
-                wait.Until(d => searchInput.Displayed && searchInput.Enabled);
-                searchInput.SendKeys(searchTerm);
-
-                var findButton = driver.FindElement(By.ClassName("custom-search-button"));
-                findButton.Click();
-                Thread.Sleep(2000);
-
-                Assert.True(IsSearchResultsDisplayed(searchTerm));
-
+                var searchResultsDisplayed = MagnifierIconPage.IsSearchResultsDisplayed(searchTerm);
+                Assert.True(searchResultsDisplayed, "Search results are not displayed");
             }
-            
-            public bool IsSearchResultsDisplayed(string searchTerm)
+
+            [Fact]
+            public void IsFileDownloaded()
             {
-                try
-                {
-                    var searchResults = wait.Until(d => d.FindElements(By.XPath($"//*[contains(text(), '{searchTerm}')]")));
-                    return searchResults.Count > 0;
-                }
-                catch (WebDriverTimeoutException)
-                {
-                    return false;
-                }
+                HomePage.GoTo();
+                HomePage.ClickAboutLink();
+
+                var isFileDownloaded = AboutPage.ValidateFileDownloaded("EPAM_Corporate_Overview_Q4_EOY.pdf");
+                Assert.True(isFileDownloaded, "The expected file was not downloaded.");
+            }
+
+            [Fact]
+            public void ValidateInsightsPage()
+            {
+                HomePage.GoTo();
+                HomePage.ClickInsightsLink();
+
+                InsightsPage.MoveToSlider();
+                InsightsPage.SwipeCarousel(2);
+
+                string articleTitle = InsightsPage.GetArticleName();
+                InsightsPage.ClickReadMore();
+
+                var isCorrectArticle = InsightsPage.ValidateArticleName(articleTitle);
+                Assert.True(isCorrectArticle, "Article title does not match.");
+            }
+
+            public void Dispose()
+            {
+                driver.Quit();
+                driver.Dispose();
             }
         }
     }
