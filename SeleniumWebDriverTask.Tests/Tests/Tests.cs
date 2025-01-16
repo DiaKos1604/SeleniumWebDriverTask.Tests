@@ -1,20 +1,12 @@
-using OpenQA.Selenium;
 using SeleniumWebDriver.Library.Pages;
 using TasksWebDriver.Pages;
 
-namespace SeleniumWebDriverTask.Tests
+namespace SeleniumWebDriverTask.Tests.Tests
 {
     public class Tests
     {
-        public class AutomatedTests : IDisposable
-        {
-            protected IWebDriver driver;
-
-            public AutomatedTests()
-            {
-                driver = WebDriverManager.GetDriver("edge", true);
-            }
-
+        public class AutomatedTests : TestBase
+        { 
             private HomePage HomePage => new HomePage(driver, TimeSpan.FromSeconds(20));
             private CareersPage CareersPage => new CareersPage(driver, TimeSpan.FromSeconds(20));
             private MagnifierIconPage MagnifierIconPage => new MagnifierIconPage(driver, TimeSpan.FromSeconds(20));
@@ -78,11 +70,6 @@ namespace SeleniumWebDriverTask.Tests
 
                 var isCorrectArticle = InsightsPage.ValidateArticleName(articleTitle);
                 Assert.True(isCorrectArticle, "Article title does not match.");
-            }
-
-            public void Dispose()
-            {
-               WebDriverManager.QuitDriver();
             }
         }
     }
