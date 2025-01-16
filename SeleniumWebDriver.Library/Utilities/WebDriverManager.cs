@@ -1,20 +1,30 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+using SeleniumWebDriver.Library.Utilities;
 
 public class WebDriverManager
 { 
-    public static IWebDriver GetWebDriver(bool headless = true)
+    private static IWebDriver? driver;
+    private static readonly object lockObject = new object();
+    public static IWebDriver GetDriver(string browserType, bool headless)
     {
-        var options = new ChromeOptions();
-        options.AddArgument("--start-maximized");
-
-        if (headless)
+        if (driver == null)
         {
-            options.AddArgument("--headless");
-            options.AddArgument("--disable-gpu");
-            options.AddArgument("--window-size=1920x1080");
+            lock (lockObject)
+            {
+                if (driver == null)
+                {
+                    driver = BrowserFactory.CreateBrowser(browserType, headless);
+                }
+            }
         }
-
-        return new ChromeDriver(options);
+        return driver;
+    }
+    public static void QuitDriver()
+    {
+        if (driver != null)
+        {
+            driver.Quit();
+            driver = null;
+        }
     }
 }

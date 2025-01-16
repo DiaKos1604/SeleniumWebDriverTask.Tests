@@ -6,13 +6,13 @@ namespace SeleniumWebDriverTask.Tests
 {
     public class Tests
     {
-        public class AutomatedTests : WebDriverManager, IDisposable
+        public class AutomatedTests : IDisposable
         {
-            private IWebDriver driver;
+            protected IWebDriver driver;
 
             public AutomatedTests()
             {
-                driver = WebDriverManager.GetWebDriver();
+                driver = WebDriverManager.GetDriver("edge", true);
             }
 
             private HomePage HomePage => new HomePage(driver, TimeSpan.FromSeconds(20));
@@ -82,8 +82,7 @@ namespace SeleniumWebDriverTask.Tests
 
             public void Dispose()
             {
-                driver.Quit();
-                driver.Dispose();
+               WebDriverManager.QuitDriver();
             }
         }
     }
