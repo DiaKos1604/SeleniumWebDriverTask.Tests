@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using SeleniumWebDriver.Library.Utilities;
 using SeleniumWebDriverTask.Core.Utilities;
 using Serilog;
 
@@ -13,7 +14,9 @@ namespace SeleniumWebDriverTask.Tests.Tests
         {
             try
             {
-                driver = WebDriverManager.GetDriver("edge", true);
+                string browserType = ConfigurationHelper.GetBrowserType();
+                bool headless = ConfigurationHelper.GetHeadlessOption();
+                driver = BrowserFactory.CreateBrowser(browserType, headless);
                 LoggerHelper.LogInformation("TestBase initialized");
             }
             catch (Exception ex)
