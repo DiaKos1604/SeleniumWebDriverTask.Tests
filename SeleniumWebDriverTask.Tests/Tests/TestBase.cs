@@ -9,6 +9,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
     {
         protected IWebDriver driver;
         protected ILogger logger = Log.Logger;
+        private bool testFailed;
 
         public TestBase()
         {
@@ -17,20 +18,35 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 string browserType = ConfigurationHelper.GetBrowserType();
                 bool headless = ConfigurationHelper.GetHeadlessOption();
                 driver = BrowserFactory.CreateBrowser(browserType, headless);
-                LoggerHelper.LogInformation("TestBase initialized");
+                LoggerHelper.LogInformation("TestBase initialized.");
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogError(ex, "TestBase");
+                MarkTestAsFailed();
+                LoggerHelper.LogError(ex, "TestBase Initialization failed.");
                 throw;
             }
         }
 
+        public void MarkTestAsFailed()
+        {
+            testFailed = true;
+            ScreenshotMaker.TakeBrowserScreenshot((ITakesScreenshot)driver, "TestFailure");
+        }
+
         public void Dispose()
         {
-            WebDriverManager.QuitDriver();
-            logger.Information("WebDriver quit and resources cleaned up");
-            Log.CloseAndFlush();
+            try
+            {
+                WebDriverManager.QuitDriver();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"Failed to quit WebDriver properly.");
+            }
+
+            logger.Information("WebDriver quit and resources cleaned up.");
+            LoggerHelper.CloseAndFlush();
         }
     }
 }

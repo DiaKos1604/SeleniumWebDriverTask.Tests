@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using OpenQA.Selenium.BiDi.Communication;
 
 namespace SeleniumWebDriverTask.Core.Utilities
 {
@@ -18,13 +17,24 @@ namespace SeleniumWebDriverTask.Core.Utilities
 
         public static string GetBrowserType()
         {
-            return Configuration["BrowserType"] ?? "chrome";
+            string browserType = Configuration["BrowserType"] ?? "chrome";
+            LoggerHelper.LogDebug($"Browser type retrieved from configuration: {browserType}");
+            return browserType;
         }
 
         public static bool GetHeadlessOption()
         {
             string headlessConfig = Configuration["Headless"] ?? "false";
-            return bool.TryParse(headlessConfig, out bool headless) && headless;
+            bool headless = false;
+            if (bool.TryParse(headlessConfig, out headless))
+            {
+                LoggerHelper.LogDebug($"Headless option parsed successfully: {headless}");
+            }
+            else
+            {
+                LoggerHelper.LogWarning($"Failed to parse headless option from configuration: {headlessConfig}");
+            }
+            return headless;
         }
     }
 }

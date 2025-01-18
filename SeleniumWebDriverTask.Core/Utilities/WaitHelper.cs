@@ -51,6 +51,7 @@ namespace TasksWebDriver.Utilities
         public bool Until(Func<bool> condition)
         {
             logger.Information("Waiting for a custom condition.");
+
             try
             {
                 return wait.Until(_ => condition());
@@ -65,6 +66,7 @@ namespace TasksWebDriver.Utilities
         public ReadOnlyCollection<IWebElement> WaitForElementsToBePresent(By locator)
         {
             logger.Information($"Waiting for elements {locator} to be present.");
+
             try
             {
                 return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.PresenceOfAllElementsLocatedBy(locator));

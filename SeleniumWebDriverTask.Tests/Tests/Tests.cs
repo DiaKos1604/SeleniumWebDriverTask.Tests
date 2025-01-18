@@ -1,3 +1,4 @@
+using OpenQA.Selenium;
 using SeleniumWebDriver.Library.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
 using TasksWebDriver.Pages;
@@ -29,6 +30,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 }
                 catch (Exception ex)
                 {
+                    MarkTestAsFailed();
                     LoggerHelper.LogError(ex, $"Error occurred in {nameof(HomePage)} while processing navigation to elements on page.");
                     throw;
                 }
@@ -44,7 +46,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 {
                     HomePage.GoTo();
                     LoggerHelper.LogInformation($"Navigated to {nameof(HomePage)}.");
-                    
+
                     HomePage.ClickCareersLink();
                     LoggerHelper.LogInformation($"Clicked the Careers link on the {nameof(HomePage)}.");
 
@@ -64,6 +66,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 }
                 catch (Exception ex)
                 {
+                    MarkTestAsFailed();
                     LoggerHelper.LogError(ex, $"Error occurred in {nameof(ValidateJobSearch)} while processing programming language: {programmingLanguage}.");
                     throw;
                 }
@@ -90,6 +93,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 }
                 catch (Exception ex)
                 {
+                    MarkTestAsFailed();
                     LoggerHelper.LogError(ex, $"Error occurred in {nameof(ValidateMagnifierIcon)} while processing the search term: {searchTerm}.");
                     throw;
                 }
@@ -114,6 +118,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 }
                 catch (Exception ex)
                 {
+                    MarkTestAsFailed();
                     LoggerHelper.LogError(ex, $"Error occurred in {nameof(IsFileDownloaded)} while attempting to download the file 'EPAM_Corporate_Overview_Q4_EOY.pdf'.");
                     throw;
                 }
@@ -150,6 +155,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 }
                 catch (Exception ex)
                 {
+                    MarkTestAsFailed();
                     LoggerHelper.LogError(ex, $"Error occurred in {nameof(ValidateInsightsPage)} while validating the article title.");
                     throw;
                 }
