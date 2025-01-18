@@ -1,11 +1,12 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using Serilog;
 
 namespace SeleniumWebDriver.Library.Pages
 {
     public class CareersPage : EpamMainPage
     {
-        public CareersPage(IWebDriver driver, TimeSpan timeout) : base(driver, timeout)
+        public CareersPage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
         {
         }
 

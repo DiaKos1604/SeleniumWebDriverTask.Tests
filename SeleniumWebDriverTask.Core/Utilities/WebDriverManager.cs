@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumWebDriver.Library.Utilities;
+using SeleniumWebDriverTask.Core.Utilities;
 
 public class WebDriverManager
 { 
@@ -23,8 +24,21 @@ public class WebDriverManager
     {
         if (driver != null)
         {
-            driver.Quit();
-            driver = null;
+            LoggerHelper.LogInformation("Attempting to close the browser.");
+            try
+            {
+                driver.Quit();
+                LoggerHelper.LogInformation("Browser closed successfully.");
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError(ex, "Failed to close the browser properly.");
+            }
+            finally
+            {
+                driver = null;
+                LoggerHelper.LogInformation("Driver instance set to null.");
+            }
         }
     }
 }

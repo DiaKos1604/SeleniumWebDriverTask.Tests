@@ -1,10 +1,11 @@
 ﻿using OpenQA.Selenium;
+using Serilog;
 
 namespace SeleniumWebDriver.Library.Pages
 {
     public class MagnifierIconPage : EpamMainPage
     {
-        public MagnifierIconPage(IWebDriver driver, TimeSpan timeout) : base(driver, timeout)
+        public MagnifierIconPage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
         {
         }
 

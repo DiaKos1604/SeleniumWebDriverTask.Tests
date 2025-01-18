@@ -1,10 +1,11 @@
 ﻿using OpenQA.Selenium;
+using Serilog;
 
 namespace SeleniumWebDriver.Library.Pages
 {
     public class HomePage : EpamMainPage
     {
-        public HomePage(IWebDriver driver, TimeSpan timeout) : base(driver, timeout)
+        public HomePage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
         {
         }
 
