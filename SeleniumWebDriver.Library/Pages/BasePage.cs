@@ -1,20 +1,25 @@
 ﻿using OpenQA.Selenium;
+using SeleniumWebDriverTask.Core.Utilities;
 using Serilog;
-using TasksWebDriver.Utilities;
 
-namespace SeleniumWebDriver.Library.Pages
+namespace SeleniumWebDriver.Business.Pages
 {
     public abstract class BasePage
     {
-        internal readonly IWebDriver driver;
-        internal readonly WaitHelper waitHelper;
-        private ILogger logger;
+        protected readonly IWebDriver _driver;
+        public readonly WaitHelper _waitHelper;
+        protected readonly ILogger _logger;
 
-        public BasePage(IWebDriver driver, TimeSpan timeout, ILogger logger)
+        protected BasePage(IWebDriver driver, TimeSpan timeout, ILogger logger)
         {
-            this.driver = driver;
-            this.logger = logger;
-            waitHelper = new WaitHelper(driver, timeout, logger);
+            _driver = driver ?? throw new ArgumentNullException(nameof(driver));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _waitHelper = new WaitHelper(driver, timeout, logger);
+        }
+
+        public virtual void WaitForPageLoad()
+        {
+            _waitHelper.WaitForPageLoad(_driver);
         }
     }
 }

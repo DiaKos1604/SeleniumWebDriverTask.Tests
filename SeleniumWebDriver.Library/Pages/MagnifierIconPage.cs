@@ -1,39 +1,16 @@
 ﻿using OpenQA.Selenium;
 using Serilog;
 
-namespace SeleniumWebDriver.Library.Pages
+namespace SeleniumWebDriver.Business.Pages
 {
-    public class MagnifierIconPage : EpamMainPage
+    public class MagnifierIconPage : BasePage
     {
         public MagnifierIconPage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
         {
         }
 
-        public IWebElement MagnifierIcon => waitHelper.WaitForElementToBeClickable(By.XPath("//button[@class='header-search__button header__icon' and @aria-expanded='false']"));
-        public IWebElement SearchInput => waitHelper.WaitForElementToBeClickable(By.Name("q"));
-        public IWebElement FindButton => waitHelper.WaitForElementToBeClickable(By.ClassName("custom-search-button"));
-
-        public void Search(string searchTerm)
-        {
-            waitHelper.WaitForPageLoad(driver);
-            MagnifierIcon.Click();
-            waitHelper.WaitForPageLoad(driver);
-            SearchInput.SendKeys(searchTerm);
-            waitHelper.WaitForPageLoad(driver);
-            FindButton.Click();
-        }
-
-        public bool IsSearchResultsDisplayed(string searchTerm)
-        {
-            try
-            {
-                var searchResults = waitHelper.WaitForElementsToBePresent(By.XPath($"//*[contains(text(), '{searchTerm}')]"));
-                return searchResults.Count > 0;
-            }
-            catch (WebDriverTimeoutException)
-            {
-                return false;
-            }
-        }
+        public By MagnifierIconLocator => By.XPath("//button[@class='header-search__button header__icon' and @aria-expanded='false']");
+        public By SearchInputLocator => By.Name("q");
+        public By FindButtonLocator => By.ClassName("custom-search-button");
     }
 }

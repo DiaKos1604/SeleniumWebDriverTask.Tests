@@ -1,52 +1,44 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Library.Utilities;
+using SeleniumWebDriver.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
 using Serilog;
 
-namespace SeleniumWebDriverTask.Tests.Tests
+namespace SeleniumWebDriverTask.Tests
 {
-    public class TestBase : IDisposable
+    public abstract class TestBase : IDisposable
     {
-        protected IWebDriver driver;
-        protected ILogger logger = Log.Logger;
-        private bool testFailed;
+        protected IWebDriver Driver;
+        protected ILogger Logger = Log.Logger;
 
-        public TestBase()
-        {
-            try
-            {
-                string browserType = ConfigurationHelper.GetBrowserType();
-                bool headless = ConfigurationHelper.GetHeadlessOption();
-                driver = BrowserFactory.CreateBrowser(browserType, headless);
-                LoggerHelper.LogInformation("TestBase initialized.");
-            }
-            catch (Exception ex)
-            {
-                MarkTestAsFailed();
-                LoggerHelper.LogError(ex, "TestBase Initialization failed.");
-                throw;
-            }
-        }
+        protected HomePage _homePage;
+        protected CareersPage _careersPage;
+        protected MagnifierIconPage _magnifierIconPage;
+        protected AboutPage _aboutPage;
+        protected InsightsPage _insightsPage;
 
-        public void MarkTestAsFailed()
+        protected TestBase(WebDriverManager webDriverManager)
         {
-            testFailed = true;
-            ScreenshotMaker.TakeBrowserScreenshot((ITakesScreenshot)driver, "TestFailure");
+            Driver = webDriverManager.GetWebDriver(
+                    ConfigurationHelper.GetBrowserType(),
+                    ConfigurationHelper.GetHeadlessOption());
+            LoggerHelper.LogInformation("TestBase initialized.");
+
+            _homePage = new HomePage(Driver, TimeSpan.FromSeconds(20), Logger);
+            _careersPage = new CareersPage(Driver, TimeSpan.FromSeconds(20), Logger);
+            _magnifierIconPage = new MagnifierIconPage(Driver, TimeSpan.FromSeconds(20), Logger);
+            _aboutPage = new AboutPage(Driver, TimeSpan.FromSeconds(20), Logger);
+            _insightsPage = new InsightsPage(Driver, TimeSpan.FromSeconds(20), Logger);
         }
 
         public void Dispose()
         {
-            try
-            {
-                WebDriverManager.QuitDriver();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, $"Failed to quit WebDriver properly.");
-            }
+            ScreenshotMaker.TakeBrowserScreenshot((ITakesScreenshot)Driver, "TestFailure");
 
-            logger.Information("WebDriver quit and resources cleaned up.");
+            LoggerHelper.LogInformation("Disposing TestBase and quitting WebDriver.");
+            WebDriverManager.Instance().QuitDriver();
+
             LoggerHelper.CloseAndFlush();
+            LoggerHelper.LogInformation("WebDriver quit and resources cleaned up.");
         }
     }
 }

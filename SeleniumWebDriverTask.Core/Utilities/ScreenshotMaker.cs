@@ -4,11 +4,11 @@ namespace SeleniumWebDriverTask.Core.Utilities
 {
     public class ScreenshotMaker
     {
-        private readonly IWebDriver driver;
+        private readonly IWebDriver _driver;
 
         public ScreenshotMaker(IWebDriver driver)
         {
-            this.driver = driver;
+            _driver = driver;
         }
 
         public static void TakeBrowserScreenshot(ITakesScreenshot driver, string description)
@@ -31,7 +31,7 @@ namespace SeleniumWebDriverTask.Core.Utilities
                 }
             }
             else
-            { 
+            {
                 LoggerHelper.LogInformation("Driver does not support taking screenshots.");
             }
         }
