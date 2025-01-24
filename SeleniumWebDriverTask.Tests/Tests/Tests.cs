@@ -1,165 +1,95 @@
-using OpenQA.Selenium;
-using SeleniumWebDriver.Library.Pages;
+using SeleniumWebDriver.Business.Pages;
+using SeleniumWebDriver.Business.Services;
 using SeleniumWebDriverTask.Core.Utilities;
-using TasksWebDriver.Pages;
 
-namespace SeleniumWebDriverTask.Tests.Tests
+namespace SeleniumWebDriverTask.Tests
 {
-    public class Tests
+    public class Tests : TestBase
     {
-        public class AutomatedTests : TestBase
+        private readonly NavigationService _navigationService;
+        public Tests() : base(WebDriverManager.Instance())
         {
-            private HomePage HomePage => new HomePage(driver, TimeSpan.FromSeconds(20), logger);
-            private CareersPage CareersPage => new CareersPage(driver, TimeSpan.FromSeconds(20), logger);
-            private MagnifierIconPage MagnifierIconPage => new MagnifierIconPage(driver, TimeSpan.FromSeconds(20), logger);
-            private AboutPage AboutPage => new AboutPage(driver, TimeSpan.FromSeconds(20), logger);
-            private InsightsPage InsightsPage => new InsightsPage(driver, TimeSpan.FromSeconds(20), logger);
+            _navigationService = new NavigationService(Driver, Logger);
+        }
 
-            [Fact]
-            public void ValidateHomePage()
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateHomePage)}.");
+        [Fact]
+        public void ValidateHomePage()
+        {
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateHomePage)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                try
-                {
-                    HomePage.GoTo();
-                    LoggerHelper.LogInformation($"Navigated to {nameof(HomePage)}.");
+            var homeService = new HomeService(Driver, TimeSpan.FromSeconds(30), Logger);
+            homeService.ValidateNavigationElementsExist();
+        }
 
-                    HomePage.ValidateNavigationElementsExist();
-                    LoggerHelper.LogInformation($"Validated navigation elements on {nameof(HomePage)}.");
-                }
-                catch (Exception ex)
-                {
-                    MarkTestAsFailed();
-                    LoggerHelper.LogError(ex, $"Error occurred in {nameof(HomePage)} while processing navigation to elements on page.");
-                    throw;
-                }
-            }
+        [Theory]
+        [InlineData("C#")]
+        public void ValidateJobSearch(string programmingLanguage)
+        {
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateJobSearch)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-            [Theory]
-            [InlineData("C#")]
-            public void ValidateJobSearch(string programmingLanguage)
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateJobSearch)}.");
+            var homeService = new HomeService(Driver, TimeSpan.FromSeconds(30), Logger);
+            homeService.ClickCareersLink();
 
-                try
-                {
-                    HomePage.GoTo();
-                    LoggerHelper.LogInformation($"Navigated to {nameof(HomePage)}.");
+            var careersService = new CareersService(Driver, TimeSpan.FromSeconds(30), Logger);
+            careersService.SearchJob(programmingLanguage);
+            careersService.GetDateLabel();
+            careersService.GetViewAndApplyButtonForLatestob();
 
-                    HomePage.ClickCareersLink();
-                    LoggerHelper.LogInformation($"Clicked the Careers link on the {nameof(HomePage)}.");
+            var programingLangElement = careersService.IsProgrammingLangElementDisplayed(programmingLanguage);
+            Assert.True(programingLangElement, $"The programming language for element {programmingLanguage} is not displayed on the Careers page.");
+        }
 
+        [Theory]
+        [InlineData("Cloud")]
+        public void ValidateMagnifierIcon(string searchTerm)
+        {
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateMagnifierIcon)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                    CareersPage.SearchJob(programmingLanguage);
-                    LoggerHelper.LogInformation($"Searched for jobs with programming language: {programmingLanguage}.");
+            var magnifierIconService = new MagnifierIconService(Driver, TimeSpan.FromSeconds(30), Logger);
+            magnifierIconService.Search(searchTerm);
 
-                    CareersPage.GetDateLabel();
-                    LoggerHelper.LogInformation("Selecting a search by date.");
+            var searchResultsDisplayed = magnifierIconService.IsSearchResultsDisplayed(searchTerm);
+            Assert.True(searchResultsDisplayed, $"Search results for '{searchTerm}' are not displayed on the search page.");
+        }
 
-                    CareersPage.GetViewAndApplyButtonForLatestob();
-                    LoggerHelper.LogInformation("Retrieved the View and Apply button for the latest job.");
+        [Fact]
+        public void IsFileDownloaded()
+        {
+            LoggerHelper.LogInformation($"Starting test: {nameof(IsFileDownloaded)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                    var programingLangElement = CareersPage.IsProgrammingLangElementDisplayed(programmingLanguage);
-                    Assert.True(programingLangElement, $"The programming language for element {programmingLanguage} is not displayed on the Careers page.");
-                    LoggerHelper.LogInformation($"The programmin language for element {programmingLanguage} is displayed on the Careers page.");
-                }
-                catch (Exception ex)
-                {
-                    MarkTestAsFailed();
-                    LoggerHelper.LogError(ex, $"Error occurred in {nameof(ValidateJobSearch)} while processing programming language: {programmingLanguage}.");
-                    throw;
-                }
-            }
+            var homeService = new HomeService(Driver, TimeSpan.FromSeconds(30), Logger);
+            homeService.ClickAboutLink();
 
-            [Theory]
-            [InlineData("Cloud")]
-            public void ValidateMagnifierIcon(string searchTerm)
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateMagnifierIcon)}.");
+            var aboutService = new AboutService(Driver, TimeSpan.FromSeconds(30), Logger);
+            aboutService.ClickDownloadButton();
 
-                try
-                {
-                    HomePage.GoTo();
-                    LoggerHelper.LogInformation($"Navigated to {nameof(HomePage)}.");
+            var isFileDownloaded = aboutService.ValidateFileDownloaded("EPAM_Corporate_Overview_Q4_EOY.pdf");
+            Assert.True(isFileDownloaded, "The expected file 'EPAM_Corporate_Overview_Q4_EOY.pdf' was not downloaded.");
+        }
 
-                    MagnifierIconPage.Search(searchTerm);
-                    LoggerHelper.LogInformation($"Clicked and entered the search term: {searchTerm} in the magnifier icon.");
+        [Fact]
+        public void ValidateInsightsPage()
+        {
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateInsightsPage)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                    var searchResultsDisplayed = MagnifierIconPage.IsSearchResultsDisplayed(searchTerm);
-                    Assert.True(searchResultsDisplayed, $"Search results for '{searchTerm}' are not displayed on the search page.");
-                    LoggerHelper.LogInformation($"Search results for '{searchTerm}' are displayed on the search page.");
+            var homeService = new HomeService(Driver, TimeSpan.FromSeconds(30), Logger);
+            homeService.ClickInsightsLink();
 
-                }
-                catch (Exception ex)
-                {
-                    MarkTestAsFailed();
-                    LoggerHelper.LogError(ex, $"Error occurred in {nameof(ValidateMagnifierIcon)} while processing the search term: {searchTerm}.");
-                    throw;
-                }
-            }
+            var insightsService = new InsightsService(Driver, TimeSpan.FromSeconds(30), Logger);
+            insightsService.MoveToSlider();
+            insightsService.SwipeCarousel(2);
 
-            [Fact]
-            public void IsFileDownloaded()
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(IsFileDownloaded)}.");
+            string articleTitle = insightsService.GetArticleName();
 
-                try
-                {
-                    HomePage.GoTo();
-                    LoggerHelper.LogInformation($"Navigated to {nameof(HomePage)}.");
+            insightsService.ClickReadMore();
 
-                    HomePage.ClickAboutLink();
-                    LoggerHelper.LogInformation($"Clicked the About link on the {nameof(HomePage)}.");
-
-                    var isFileDownloaded = AboutPage.ValidateFileDownloaded("EPAM_Corporate_Overview_Q4_EOY.pdf");
-                    Assert.True(isFileDownloaded, "The expected file 'EPAM_Corporate_Overview_Q4_EOY.pdf' was not downloaded.");
-                    LoggerHelper.LogInformation("The expected file 'EPAM_Corporate_Overview_Q4_EOY.pdf' was downloaded.");
-                }
-                catch (Exception ex)
-                {
-                    MarkTestAsFailed();
-                    LoggerHelper.LogError(ex, $"Error occurred in {nameof(IsFileDownloaded)} while attempting to download the file 'EPAM_Corporate_Overview_Q4_EOY.pdf'.");
-                    throw;
-                }
-            }
-
-            [Fact]
-            public void ValidateInsightsPage()
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateInsightsPage)}.");
-
-                try
-                {
-                    HomePage.GoTo();
-                    LoggerHelper.LogInformation($"Navigated to {nameof(HomePage)}.");
-
-                    HomePage.ClickInsightsLink();
-                    LoggerHelper.LogInformation($"Clicked the Insights link on the {nameof(HomePage)}.");
-
-                    InsightsPage.MoveToSlider();
-                    LoggerHelper.LogInformation("Moved to the slider and clicked it.");
-
-                    InsightsPage.SwipeCarousel(2);
-                    LoggerHelper.LogInformation("Swiped the slider twice.");
-
-                    string articleTitle = InsightsPage.GetArticleName();
-                    LoggerHelper.LogInformation($"Get the article title: {articleTitle}.");
-
-                    InsightsPage.ClickReadMore();
-                    LoggerHelper.LogInformation($"Clicked the Read More button.");
-
-                    var isCorrectArticle = InsightsPage.ValidateArticleName(articleTitle);
-                    Assert.True(isCorrectArticle, $"The article title: {articleTitle} not matches the previously noted title.");
-                    LoggerHelper.LogInformation($"The article title: {articleTitle} matches the previously noted title.");
-                }
-                catch (Exception ex)
-                {
-                    MarkTestAsFailed();
-                    LoggerHelper.LogError(ex, $"Error occurred in {nameof(ValidateInsightsPage)} while validating the article title.");
-                    throw;
-                }
-            }
+            var isCorrectArticle = insightsService.ValidateArticleName(articleTitle);
+            Assert.True(isCorrectArticle, $"The article title: {articleTitle} not matches the previously noted title.");
         }
     }
 }

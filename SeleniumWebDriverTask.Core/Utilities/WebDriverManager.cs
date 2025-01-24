@@ -1,46 +1,70 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Library.Utilities;
-using SeleniumWebDriverTask.Core.Utilities;
 
-public class WebDriverManager
-{ 
-    private static IWebDriver? driver;
-    private static readonly object lockObject = new object();
-
-    public static IWebDriver GetDriver(string browserType, bool headless)
+namespace SeleniumWebDriverTask.Core.Utilities
+{
+    public class WebDriverManager
     {
-        if (driver == null)
+        private WebDriverManager() { }
+
+        private static WebDriverManager? _instance;
+        private static readonly object _lock = new object();
+        private IWebDriver? _webDriver;
+        public static WebDriverManager Instance()
         {
-            lock (lockObject)
+
+            if (_instance == null)
             {
-                if (driver == null)
+                lock (_lock)
                 {
-                    driver = BrowserFactory.CreateBrowser(browserType, headless);
+                    if (_instance == null)
+                    {
+                        _instance = new WebDriverManager();
+                    }
                 }
             }
+            return _instance;
         }
-        return driver;
-    }
 
-    public static void QuitDriver()
-    {
-        if (driver != null)
+        public IWebDriver GetWebDriver(string browserType, bool headless)
         {
-            LoggerHelper.LogInformation("Attempting to close the browser.");
+            if (_webDriver != null)
+            {
+                LoggerHelper.LogInformation("WebDriver instance already exists. Returning the existing instance.");
+                return _webDriver;
+            }
 
-            try
+            lock (_lock)
             {
-                driver.Quit();
-                LoggerHelper.LogInformation("Browser closed successfully.");
+                if (_webDriver == null)
+                {
+                    LoggerHelper.LogInformation("Creating new WebDriver instance.");
+                    _webDriver = BrowserFactory.CreateBrowser(browserType, headless);
+                }
             }
-            catch (Exception ex)
+            return _webDriver;
+        }
+
+        public void QuitDriver()
+        {
+            if (_webDriver != null)
             {
-                LoggerHelper.LogError(ex, "Failed to close the browser properly.");
-            }
-            finally
-            {
-                driver = null;
-                LoggerHelper.LogInformation("Driver instance set to null.");
+                LoggerHelper.LogInformation("Attempting to close the browser.");
+
+                try
+                {
+                    _webDriver.Quit();
+                    LoggerHelper.LogInformation("Browser closed successfully.");
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogError(ex, "Failed to close the browser properly.");
+                }
+                finally
+                {
+                    _webDriver.Dispose();
+                    _webDriver = null;
+                    LoggerHelper.LogInformation("Driver instance set to null.");
+                }
             }
         }
     }

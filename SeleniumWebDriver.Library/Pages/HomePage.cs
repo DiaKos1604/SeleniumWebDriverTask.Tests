@@ -1,29 +1,19 @@
 ﻿using OpenQA.Selenium;
 using Serilog;
 
-namespace SeleniumWebDriver.Library.Pages
+namespace SeleniumWebDriver.Business.Pages
 {
-    public class HomePage : EpamMainPage
+    public class HomePage : BasePage
     {
+        public const string Url = "https://www.epam.com/";
+
         public HomePage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
         {
         }
 
-        public void ClickCareersLink() => waitHelper.WaitForElementToBeClickable(By.LinkText("Careers")).Click();
-        public void ClickMagnifierIcon() => waitHelper.WaitForElementToBeClickable(By.ClassName("header-search__button")).Click();
-        public void ClickAboutLink() => waitHelper.WaitForElementToBeClickable(By.LinkText("About")).Click();
-        public void ClickInsightsLink() => waitHelper.WaitForElementToBeClickable(By.LinkText("Insights")).Click();
-
-        public void ValidateNavigationElementsExist()
-        {
-            waitHelper.WaitForPageLoad(driver);
-            ClickCareersLink();
-            waitHelper.WaitForPageLoad(driver);
-            ClickMagnifierIcon();
-            waitHelper.WaitForPageLoad(driver);
-            ClickAboutLink();
-            waitHelper.WaitForPageLoad(driver);
-            ClickInsightsLink();
-        }
+        public By CareersLinkLocator => By.LinkText("Careers");
+        public By MagnifierIconLocator => By.ClassName("header-search__button");
+        public By AboutLinkLocator => By.LinkText("About");
+        public By InsightsLinkLocator => By.LinkText("Insights");
     }
 }

@@ -1,30 +1,14 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using SeleniumWebDriver.Library.Pages;
 using Serilog;
 
-
-namespace TasksWebDriver.Pages
+namespace SeleniumWebDriver.Business.Pages
 {
-    public class AboutPage : EpamMainPage
+    public class AboutPage : BasePage
     {
         public AboutPage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
         {
         }
 
-        public void ClickDownloadButton()
-        { 
-            IWebElement downloadButton = waitHelper.WaitForElementToBeClickable(By.CssSelector("a.button-ui-23.btn-focusable[href*='EPAM_Corporate_Overview_Q4_EOY.pdf']"));
-            waitHelper.WaitForPageLoad(driver);
-            new Actions(driver).Click(downloadButton).Perform();
-        }
-
-        public bool ValidateFileDownloaded(string fileName)
-        {
-            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-            string filePath = Path.Combine(downloadPath, fileName);
-
-            return waitHelper.Until(() => File.Exists(filePath));
-        }
+        public By DownloadButtonLocator => By.CssSelector("a.button-ui-23.btn-focusable[href*='EPAM_Corporate_Overview_Q4_EOY.pdf']");
     }
 }
