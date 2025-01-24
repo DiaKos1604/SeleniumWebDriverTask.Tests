@@ -5,7 +5,7 @@ namespace SeleniumWebDriver.Business.Pages
 {
     public class CareersPage : BasePage
     {
-        public CareersPage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
+        public CareersPage(IWebDriver driver) : base(driver)
         {
         }
 

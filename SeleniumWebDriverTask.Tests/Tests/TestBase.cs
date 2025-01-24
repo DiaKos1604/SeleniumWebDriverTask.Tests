@@ -8,7 +8,6 @@ namespace SeleniumWebDriverTask.Tests
     public abstract class TestBase : IDisposable
     {
         protected IWebDriver Driver;
-        protected ILogger Logger = Log.Logger;
 
         protected HomePage _homePage;
         protected CareersPage _careersPage;
@@ -23,17 +22,15 @@ namespace SeleniumWebDriverTask.Tests
                     ConfigurationHelper.GetHeadlessOption());
             LoggerHelper.LogInformation("TestBase initialized.");
 
-            _homePage = new HomePage(Driver, TimeSpan.FromSeconds(20), Logger);
-            _careersPage = new CareersPage(Driver, TimeSpan.FromSeconds(20), Logger);
-            _magnifierIconPage = new MagnifierIconPage(Driver, TimeSpan.FromSeconds(20), Logger);
-            _aboutPage = new AboutPage(Driver, TimeSpan.FromSeconds(20), Logger);
-            _insightsPage = new InsightsPage(Driver, TimeSpan.FromSeconds(20), Logger);
+            _homePage = new HomePage(Driver);
+            _careersPage = new CareersPage(Driver);
+            _magnifierIconPage = new MagnifierIconPage(Driver);
+            _aboutPage = new AboutPage(Driver);
+            _insightsPage = new InsightsPage(Driver);
         }
 
         public void Dispose()
         {
-            ScreenshotMaker.TakeBrowserScreenshot((ITakesScreenshot)Driver, "TestFailure");
-
             LoggerHelper.LogInformation("Disposing TestBase and quitting WebDriver.");
             WebDriverManager.Instance().QuitDriver();
 

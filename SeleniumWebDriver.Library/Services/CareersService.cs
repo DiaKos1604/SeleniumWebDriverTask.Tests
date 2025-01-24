@@ -10,10 +10,10 @@ namespace SeleniumWebDriver.Business.Services
         private readonly CareersPage _page;
         private readonly IWebDriver _driver;
 
-        public CareersService(IWebDriver driver, TimeSpan timeout, ILogger logger)
+        public CareersService(IWebDriver driver)
         {
             _driver = driver;
-            _page = new CareersPage(driver, timeout, logger);
+            _page = new CareersPage(driver);
         }
 
         public IWebElement FindJobLink => _page._waitHelper.WaitForElementToBeClickable(_page.FindJobLinkLocator);

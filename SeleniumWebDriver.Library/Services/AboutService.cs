@@ -10,10 +10,10 @@ namespace SeleniumWebDriver.Business.Services
         private readonly AboutPage _page;
         private readonly IWebDriver _driver;
 
-        public AboutService(IWebDriver driver, TimeSpan timeout, ILogger logger)
+        public AboutService(IWebDriver driver)
         {
             _driver = driver;
-            _page = new AboutPage(driver, timeout, logger);
+            _page = new AboutPage(driver);
         }
 
 

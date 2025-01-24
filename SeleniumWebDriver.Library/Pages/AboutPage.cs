@@ -5,7 +5,7 @@ namespace SeleniumWebDriver.Business.Pages
 {
     public class AboutPage : BasePage
     {
-        public AboutPage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
+        public AboutPage(IWebDriver driver) : base(driver)
         {
         }
 

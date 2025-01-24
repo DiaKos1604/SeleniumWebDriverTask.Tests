@@ -1,3 +1,4 @@
+using OpenQA.Selenium;
 using SeleniumWebDriver.Business.Pages;
 using SeleniumWebDriver.Business.Services;
 using SeleniumWebDriverTask.Core.Utilities;
@@ -9,7 +10,7 @@ namespace SeleniumWebDriverTask.Tests
         private readonly NavigationService _navigationService;
         public Tests() : base(WebDriverManager.Instance())
         {
-            _navigationService = new NavigationService(Driver, Logger);
+            _navigationService = new NavigationService(Driver);
         }
 
         [Fact]
@@ -18,8 +19,14 @@ namespace SeleniumWebDriverTask.Tests
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateHomePage)}.");
             _navigationService.GoToPage(HomePage.Url);
 
-            var homeService = new HomeService(Driver, TimeSpan.FromSeconds(30), Logger);
+            var homeService = new HomeService(Driver);
             homeService.ValidateNavigationElementsExist();
+
+             _navigationService.GoToPage(HomePage.Url);
+            AssertionHelper.HandleAssert(() =>
+            {
+                Assert.Equal(HomePage.Url, Driver.Url);
+            }, Driver);
         }
 
         [Theory]
@@ -29,16 +36,19 @@ namespace SeleniumWebDriverTask.Tests
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateJobSearch)}.");
             _navigationService.GoToPage(HomePage.Url);
 
-            var homeService = new HomeService(Driver, TimeSpan.FromSeconds(30), Logger);
+            var homeService = new HomeService(Driver);
             homeService.ClickCareersLink();
 
-            var careersService = new CareersService(Driver, TimeSpan.FromSeconds(30), Logger);
+            var careersService = new CareersService(Driver);
             careersService.SearchJob(programmingLanguage);
             careersService.GetDateLabel();
             careersService.GetViewAndApplyButtonForLatestob();
 
             var programingLangElement = careersService.IsProgrammingLangElementDisplayed(programmingLanguage);
-            Assert.True(programingLangElement, $"The programming language for element {programmingLanguage} is not displayed on the Careers page.");
+            AssertionHelper.HandleAssert(() =>
+            {
+                Assert.True(programingLangElement, $"The programming language for element {programmingLanguage} is not displayed on the Careers page.");
+            }, Driver);
         }
 
         [Theory]
@@ -48,11 +58,14 @@ namespace SeleniumWebDriverTask.Tests
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateMagnifierIcon)}.");
             _navigationService.GoToPage(HomePage.Url);
 
-            var magnifierIconService = new MagnifierIconService(Driver, TimeSpan.FromSeconds(30), Logger);
+            var magnifierIconService = new MagnifierIconService(Driver);
             magnifierIconService.Search(searchTerm);
 
             var searchResultsDisplayed = magnifierIconService.IsSearchResultsDisplayed(searchTerm);
-            Assert.True(searchResultsDisplayed, $"Search results for '{searchTerm}' are not displayed on the search page.");
+            AssertionHelper.HandleAssert(() =>
+            {
+                Assert.True(searchResultsDisplayed, $"Search results for '{searchTerm}' are not displayed on the search page.");
+            }, Driver);
         }
 
         [Fact]
@@ -61,14 +74,18 @@ namespace SeleniumWebDriverTask.Tests
             LoggerHelper.LogInformation($"Starting test: {nameof(IsFileDownloaded)}.");
             _navigationService.GoToPage(HomePage.Url);
 
-            var homeService = new HomeService(Driver, TimeSpan.FromSeconds(30), Logger);
+            var homeService = new HomeService(Driver);
             homeService.ClickAboutLink();
 
-            var aboutService = new AboutService(Driver, TimeSpan.FromSeconds(30), Logger);
+            var aboutService = new AboutService(Driver);
             aboutService.ClickDownloadButton();
 
-            var isFileDownloaded = aboutService.ValidateFileDownloaded("EPAM_Corporate_Overview_Q4_EOY.pdf");
-            Assert.True(isFileDownloaded, "The expected file 'EPAM_Corporate_Overview_Q4_EOY.pdf' was not downloaded.");
+            var expectedFileName = "EPAM_Corporate_Overview_Q4_EOY.pdf";
+            var actualFileDownloaded = aboutService.ValidateFileDownloaded(expectedFileName);
+            AssertionHelper.HandleAssert(() =>
+            {
+                Assert.True(actualFileDownloaded, $"The expected file '{expectedFileName}' was not downloaded.");
+            }, Driver);
         }
 
         [Fact]
@@ -77,10 +94,10 @@ namespace SeleniumWebDriverTask.Tests
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateInsightsPage)}.");
             _navigationService.GoToPage(HomePage.Url);
 
-            var homeService = new HomeService(Driver, TimeSpan.FromSeconds(30), Logger);
+            var homeService = new HomeService(Driver);
             homeService.ClickInsightsLink();
 
-            var insightsService = new InsightsService(Driver, TimeSpan.FromSeconds(30), Logger);
+            var insightsService = new InsightsService(Driver);
             insightsService.MoveToSlider();
             insightsService.SwipeCarousel(2);
 
@@ -89,7 +106,10 @@ namespace SeleniumWebDriverTask.Tests
             insightsService.ClickReadMore();
 
             var isCorrectArticle = insightsService.ValidateArticleName(articleTitle);
-            Assert.True(isCorrectArticle, $"The article title: {articleTitle} not matches the previously noted title.");
+            AssertionHelper.HandleAssert(() =>
+            {
+                Assert.True(isCorrectArticle, $"The article title: {articleTitle} not matches the previously noted title.");
+            }, Driver);
         }
     }
 }

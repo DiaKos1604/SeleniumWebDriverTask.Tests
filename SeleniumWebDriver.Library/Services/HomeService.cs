@@ -10,9 +10,9 @@ namespace SeleniumWebDriver.Business.Services
         private readonly HomePage _page;
         private readonly IWebDriver _driver;
 
-        public HomeService(IWebDriver driver, TimeSpan timeout, ILogger logger)
+        public HomeService(IWebDriver driver)
         {
-            _page = new HomePage(driver, timeout, logger);
+            _page = new HomePage(driver);
             _driver = driver;
         }
 

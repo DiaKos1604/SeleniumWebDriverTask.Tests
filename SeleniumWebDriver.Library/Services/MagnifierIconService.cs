@@ -10,10 +10,10 @@ namespace SeleniumWebDriver.Business.Services
         private readonly MagnifierIconPage _page;
         private readonly IWebDriver _driver;
 
-        public MagnifierIconService(IWebDriver driver, TimeSpan timeout, ILogger logger)
+        public MagnifierIconService(IWebDriver driver)
         {
             _driver = driver;
-            _page = new MagnifierIconPage(driver, timeout, logger);
+            _page = new MagnifierIconPage(driver);
         }
 
         public void Search(string searchTerm)

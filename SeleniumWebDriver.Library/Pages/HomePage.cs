@@ -7,7 +7,7 @@ namespace SeleniumWebDriver.Business.Pages
     {
         public const string Url = "https://www.epam.com/";
 
-        public HomePage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
+        public HomePage(IWebDriver driver) : base(driver)
         {
         }
 

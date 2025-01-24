@@ -6,15 +6,15 @@ namespace SeleniumWebDriver.Business.Pages
 {
     public abstract class BasePage
     {
+        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+
         protected readonly IWebDriver _driver;
         public readonly WaitHelper _waitHelper;
-        protected readonly ILogger _logger;
 
-        protected BasePage(IWebDriver driver, TimeSpan timeout, ILogger logger)
+        protected BasePage(IWebDriver driver)
         {
             _driver = driver ?? throw new ArgumentNullException(nameof(driver));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _waitHelper = new WaitHelper(driver, timeout, logger);
+            _waitHelper = new WaitHelper(driver, DefaultTimeout);
         }
 
         public virtual void WaitForPageLoad()

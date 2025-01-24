@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumWebDriver.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
-using Serilog;
 
 namespace SeleniumWebDriver.Business.Services
 {
@@ -10,10 +9,10 @@ namespace SeleniumWebDriver.Business.Services
         private readonly InsightsPage _page;
         private readonly IWebDriver _driver;
 
-        public InsightsService(IWebDriver driver, TimeSpan timeout, ILogger logger)
+        public InsightsService(IWebDriver driver)
         {
             _driver = driver;
-            _page = new InsightsPage(driver, timeout, logger);
+            _page = new InsightsPage(driver);
         }
 
         public void MoveToSlider()
