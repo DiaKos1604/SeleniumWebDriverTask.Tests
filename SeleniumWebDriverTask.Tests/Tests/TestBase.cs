@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumWebDriver.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
-using Serilog;
 
 namespace SeleniumWebDriverTask.Tests
 {
@@ -14,6 +13,7 @@ namespace SeleniumWebDriverTask.Tests
         protected MagnifierIconPage _magnifierIconPage;
         protected AboutPage _aboutPage;
         protected InsightsPage _insightsPage;
+        protected ServicesSectionPage _servicesSectionPage;
 
         protected TestBase(WebDriverManager webDriverManager)
         {
@@ -27,6 +27,7 @@ namespace SeleniumWebDriverTask.Tests
             _magnifierIconPage = new MagnifierIconPage(Driver);
             _aboutPage = new AboutPage(Driver);
             _insightsPage = new InsightsPage(Driver);
+            _servicesSectionPage = new ServicesSectionPage(Driver);
         }
 
         public void Dispose()

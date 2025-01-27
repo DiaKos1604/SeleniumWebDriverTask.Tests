@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumWebDriver.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
-using Serilog;
 
 namespace SeleniumWebDriver.Business.Services
 {
@@ -39,22 +38,29 @@ namespace SeleniumWebDriver.Business.Services
             LoggerHelper.LogInformation($"Clicking 'Insights' link on {nameof(HomePage)}.");
             _page._waitHelper.WaitForElementToBeClickable(_page.InsightsLinkLocator).Click();
         }
-
+        public void ClickServicesLink()
+        {
+            LoggerHelper.LogInformation(($"Clicking 'Service' link on {nameof(ServicesSectionPage)}."));
+            _page._waitHelper.WaitForElementToBeClickable( _page.ServicesLinkLocator).Click();
+        }
         public void ValidateNavigationElementsExist()
         {
             LoggerHelper.LogInformation($"Validating navigation elements on {nameof(HomePage)}.");
 
             ClickCareersLink();
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
 
             ClickMagnifierIcon();
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
 
             ClickAboutLink();
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
 
             ClickInsightsLink();
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
+
+            ClickServicesLink();
+            _page._waitHelper.WaitForPageLoad( );
 
             LoggerHelper.LogInformation($"Validation of navigation elements on {nameof(HomePage)} is complete.");
         }

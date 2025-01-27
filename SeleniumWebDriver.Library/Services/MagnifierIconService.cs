@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumWebDriver.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
-using Serilog;
 
 namespace SeleniumWebDriver.Business.Services
 {
@@ -20,20 +19,19 @@ namespace SeleniumWebDriver.Business.Services
         {
             LoggerHelper.LogInformation($"Starting search for term: {searchTerm}.");
 
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
             _page._waitHelper.WaitForElementToBeClickable(_page.MagnifierIconLocator).Click();
             LoggerHelper.LogInformation("Clicking the magnifier icon.");
 
-            _page._waitHelper.WaitForPageLoad(_driver);
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
             _page._waitHelper.WaitForElementToBeClickable(_page.SearchInputLocator).SendKeys(searchTerm);
             LoggerHelper.LogInformation($"Entering search term: '{searchTerm}' in the search input.");
 
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
             _page._waitHelper.WaitForElementToBeClickable(_page.FindButtonLocator).Click();
             LoggerHelper.LogInformation("Clicking the 'Find' button.");
 
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
             LoggerHelper.LogInformation($"Search for '{searchTerm}' completed successfully.");
         }
 

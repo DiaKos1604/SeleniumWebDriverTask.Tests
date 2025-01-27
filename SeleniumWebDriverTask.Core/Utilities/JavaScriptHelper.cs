@@ -18,9 +18,9 @@ namespace SeleniumWebDriverTask.Core.Utilities
             _jsExecutor.ExecuteScript("arguments[0].click();", element);
         }
 
-        public string GetPageTitle()
+        public void PauseElement(IWebElement element)
         {
-            return (string)_jsExecutor.ExecuteScript("return document.title;");
+            _jsExecutor.ExecuteScript("arguments[0].pause();", element);
         }
 
         public void ScrollToElement(IWebElement element)

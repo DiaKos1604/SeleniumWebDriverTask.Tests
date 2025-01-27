@@ -15,5 +15,6 @@ namespace SeleniumWebDriver.Business.Pages
         public By MagnifierIconLocator => By.ClassName("header-search__button");
         public By AboutLinkLocator => By.LinkText("About");
         public By InsightsLinkLocator => By.LinkText("Insights");
+        public By ServicesLinkLocator => By.LinkText("Services");
     }
 }

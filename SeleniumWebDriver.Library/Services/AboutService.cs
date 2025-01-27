@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumWebDriver.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
-using Serilog;
 
 namespace SeleniumWebDriver.Business.Services
 {
@@ -21,7 +20,7 @@ namespace SeleniumWebDriver.Business.Services
         {
             LoggerHelper.LogInformation("Attempting to click the download button in 'EPAM at a Glance' section.");
 
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
             IWebElement downloadButton = _page._waitHelper.WaitForElementToBeClickable(_page.DownloadButtonLocator);
             
             new ActionsHelper(_driver).ClickElement(downloadButton);

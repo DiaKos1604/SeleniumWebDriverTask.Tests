@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SeleniumWebDriver.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
-using Serilog;
 
 namespace SeleniumWebDriver.Business.Services
 {
@@ -58,7 +57,7 @@ namespace SeleniumWebDriver.Business.Services
         {
             LoggerHelper.LogInformation("Retrieving the 'View and Apply' button for the latest job.");
 
-            _page._waitHelper.WaitForPageLoad(_driver);
+            _page._waitHelper.WaitForPageLoad();
             var latestElement = _page._waitHelper.WaitForElementToBeClickable(By.XPath("//ul[@class='search-result__list']/li[position()=1]/descendant::a[text()='View and apply']"));
             new ActionsHelper(_driver).ClickElement(latestElement);
             LoggerHelper.LogInformation("'View and Apply' button for the latest job clicked successfully.");

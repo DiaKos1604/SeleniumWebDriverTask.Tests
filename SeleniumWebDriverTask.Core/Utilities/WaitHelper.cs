@@ -5,14 +5,9 @@ using System.Collections.ObjectModel;
 
 namespace SeleniumWebDriverTask.Core.Utilities
 {
-    public class WaitHelper
+    public class WaitHelper(IWebDriver driver, TimeSpan DefaultTimeout)
     {
-        private readonly WebDriverWait _wait;
-
-        public WaitHelper(IWebDriver driver, TimeSpan DefaultTimeout)
-        {
-            _wait = new WebDriverWait(driver, DefaultTimeout);
-        }
+        private readonly WebDriverWait _wait = new (driver, DefaultTimeout);
 
         public IWebElement WaitForElementToBeVisible(By locator)
         {
@@ -42,7 +37,7 @@ namespace SeleniumWebDriverTask.Core.Utilities
             }
         }
 
-        public bool WaitForPageLoad(IWebDriver driver)
+        public bool WaitForPageLoad()
         {
             Log.Logger.Information("Waiting for page to load completely.");
             try

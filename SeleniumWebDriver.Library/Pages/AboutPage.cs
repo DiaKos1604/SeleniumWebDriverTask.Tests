@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using Serilog;
 
 namespace SeleniumWebDriver.Business.Pages
 {

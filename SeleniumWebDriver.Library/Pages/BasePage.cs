@@ -19,7 +19,8 @@ namespace SeleniumWebDriver.Business.Pages
 
         public virtual void WaitForPageLoad()
         {
-            _waitHelper.WaitForPageLoad(_driver);
+            Log.Logger.Information("Waiting for page load...");
+            _waitHelper.WaitForPageLoad();
         }
     }
 }
