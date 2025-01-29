@@ -20,6 +20,7 @@ namespace SeleniumWebDriver.Business.Services
         {
             LoggerHelper.LogInformation($"Move to Artificial Intelligence link.");
 
+            _page._waitHelper.WaitForPageLoad();
             IWebElement webElement = _page._waitHelper.WaitForElementToBeVisible(_page.AILocator);
             var jsHelper = new JavaScriptHelper(_driver);
             jsHelper.ClickElement(webElement);
@@ -72,6 +73,7 @@ namespace SeleniumWebDriver.Business.Services
             }
             return isValid;
         }
+
         public bool ValidateOurRelatedExpertiseSectionIsDisplayed()
         {
             try

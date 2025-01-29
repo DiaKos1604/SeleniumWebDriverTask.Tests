@@ -1,0 +1,14 @@
+{
+  "specFlow": {
+    "bindingCulture": {
+      "name": "en-US"
+    },
+    "unitTestProvider": {
+      "name": "xUnit"
+    },
+    "runtime": {
+      "stopAtFirstError": false,
+      "executionOrder": "Sequential"
+    }
+  }
+}

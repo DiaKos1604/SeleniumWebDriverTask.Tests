@@ -15,52 +15,32 @@ namespace SeleniumWebDriver.Business.Services
             _driver = driver;
         }
 
-        public void ClickCareersLink()
+        private void ClickElement(By locator, string elementName)
         {
-            LoggerHelper.LogInformation($"Clicking 'Careers' link on {nameof(HomePage)}.");
-            _page._waitHelper.WaitForElementToBeClickable(_page.CareersLinkLocator).Click();
+            LoggerHelper.LogInformation($"Clicking '{elementName}' element on {nameof(HomePage)}.");
+            _page._waitHelper.WaitForElementToBeClickable(locator).Click();
+            _page._waitHelper.WaitForPageLoad();
         }
 
-        public void ClickMagnifierIcon()
-        {
-            LoggerHelper.LogInformation($"Clicking magnifier icon on {nameof(HomePage)}.");
-            _page._waitHelper.WaitForElementToBeClickable(_page.MagnifierIconLocator).Click();
-        }
+        public void ClickCareersLink() => ClickElement(_page.CareersLinkLocator, "Careers");
 
-        public void ClickAboutLink()
-        {
-            LoggerHelper.LogInformation($"Clicking 'About' link on {nameof(HomePage)}.");
-            _page._waitHelper.WaitForElementToBeClickable(_page.AboutLinkLocator).Click();
-        }
+        public void ClickMagnifierIcon() => ClickElement(_page.MagnifierIconLocator, "Magnifier Icon");
 
-        public void ClickInsightsLink()
-        {
-            LoggerHelper.LogInformation($"Clicking 'Insights' link on {nameof(HomePage)}.");
-            _page._waitHelper.WaitForElementToBeClickable(_page.InsightsLinkLocator).Click();
-        }
-        public void ClickServicesLink()
-        {
-            LoggerHelper.LogInformation(($"Clicking 'Service' link on {nameof(ServicesSectionPage)}."));
-            _page._waitHelper.WaitForElementToBeClickable( _page.ServicesLinkLocator).Click();
-        }
+        public void ClickAboutLink() => ClickElement(_page.AboutLinkLocator, "About");
+
+        public void ClickInsightsLink() => ClickElement(_page.InsightsLinkLocator, "Insights");
+
+        public void ClickServicesLink() => ClickElement(_page.ServicesLinkLocator, "Services");
+
         public void ValidateNavigationElementsExist()
         {
             LoggerHelper.LogInformation($"Validating navigation elements on {nameof(HomePage)}.");
 
             ClickCareersLink();
-            _page._waitHelper.WaitForPageLoad();
-
             ClickMagnifierIcon();
-            _page._waitHelper.WaitForPageLoad();
-
             ClickAboutLink();
-            _page._waitHelper.WaitForPageLoad();
-
             ClickInsightsLink();
-            _page._waitHelper.WaitForPageLoad();
-
             ClickServicesLink();
-            _page._waitHelper.WaitForPageLoad( );
 
             LoggerHelper.LogInformation($"Validation of navigation elements on {nameof(HomePage)} is complete.");
         }

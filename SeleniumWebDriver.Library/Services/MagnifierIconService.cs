@@ -15,38 +15,49 @@ namespace SeleniumWebDriver.Business.Services
             _page = new MagnifierIconPage(driver);
         }
 
-        public void Search(string searchTerm)
+        private void ClickElement(By locator, string elementName)
         {
-            LoggerHelper.LogInformation($"Starting search for term: {searchTerm}.");
+            LoggerHelper.LogInformation($"Clicking '{elementName}' element.");
 
-            _page._waitHelper.WaitForPageLoad();
-            _page._waitHelper.WaitForElementToBeClickable(_page.MagnifierIconLocator).Click();
-            LoggerHelper.LogInformation("Clicking the magnifier icon.");
+            var element = _page._waitHelper.WaitForElementToBeClickable(locator);
+            element.Click();
 
-            _page._waitHelper.WaitForPageLoad();
-            _page._waitHelper.WaitForElementToBeClickable(_page.SearchInputLocator).SendKeys(searchTerm);
-            LoggerHelper.LogInformation($"Entering search term: '{searchTerm}' in the search input.");
+            LoggerHelper.LogInformation($"Successfully clicked '{elementName}' element.");
+        }
 
+        public void EnterSearchTerm(string searchTerm)
+        {
             _page._waitHelper.WaitForPageLoad();
-            _page._waitHelper.WaitForElementToBeClickable(_page.FindButtonLocator).Click();
-            LoggerHelper.LogInformation("Clicking the 'Find' button.");
+            var searchInput = _page._waitHelper.WaitForElementToBeClickable(_page.SearchInputLocator);
+            searchInput.Clear();
+            searchInput.SendKeys(searchTerm);
 
-            _page._waitHelper.WaitForPageLoad();
-            LoggerHelper.LogInformation($"Search for '{searchTerm}' completed successfully.");
+            LoggerHelper.LogInformation($"Search term '{searchTerm}' entered successfully.");
+        }
+
+        public void ClickFindButton()
+        {
+            ClickElement(_page.FindButtonLocator, "Find Button");
+
+            LoggerHelper.LogInformation($"Search completed successfully.");
         }
 
         public bool IsSearchResultsDisplayed(string searchTerm)
         {
-            LoggerHelper.LogInformation($"Checking if search results for '{searchTerm}' are displayed on the search page.");
+            LoggerHelper.LogInformation($"Validating if search results for '{searchTerm}' are displayed.");
             try
             {
-                LoggerHelper.LogInformation($"Search results for '{searchTerm}' are displayed.");
                 var searchResults = _page._waitHelper.WaitForElementsToBePresent(By.XPath($"//*[contains(text(), '{searchTerm}')]"));
-                return searchResults.Count > 0;
+                bool isDisplayed = searchResults.Count > 0;
+
+                LoggerHelper.LogInformation(isDisplayed
+                    ? $"Search results for '{searchTerm}' are displayed."
+                    : $"No search results found for '{searchTerm}'.");
+                return isDisplayed;
             }
-            catch (WebDriverTimeoutException)
+            catch (WebDriverTimeoutException ex)
             {
-                LoggerHelper.LogInformation($"No search results found for '{searchTerm}'.");
+                LoggerHelper.LogWarning($"Timeout while waiting for search results for '{searchTerm}': {ex.Message}");
                 return false;
             }
         }

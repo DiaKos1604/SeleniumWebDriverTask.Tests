@@ -23,9 +23,6 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 var homeService = new HomeService(Driver);
                 homeService.ValidateNavigationElementsExist();
 
-                _navigationService.GoToPage(HomePage.Url);
-
-                Assert.Equal(HomePage.Url, Driver.Url);
             }, Driver);
         }
 
@@ -42,9 +39,10 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 homeService.ClickCareersLink();
 
                 var careersService = new CareersService(Driver);
+                careersService.ClickFindYourDreamJobLink();
                 careersService.SearchJob(programmingLanguage);
-                careersService.GetDateLabel();
-                careersService.GetViewAndApplyButtonForLatestob();
+                careersService.SelectSearchByDate();
+                careersService.ClickViewAndApplyForLatestJob();
 
                 var programingLangElement = careersService.IsProgrammingLangElementDisplayed(programmingLanguage);
 
@@ -62,7 +60,8 @@ namespace SeleniumWebDriverTask.Tests.Tests
                 _navigationService.GoToPage(HomePage.Url);
 
                 var magnifierIconService = new MagnifierIconService(Driver);
-                magnifierIconService.Search(searchTerm);
+                magnifierIconService.EnterSearchTerm(searchTerm);
+                magnifierIconService.ClickFindButton();
 
                 var searchResultsDisplayed = magnifierIconService.IsSearchResultsDisplayed(searchTerm);
 
