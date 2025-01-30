@@ -8,7 +8,8 @@ namespace SeleniumWebDriverTask.Core.Utilities
 
         private static WebDriverManager? _instance;
         private static readonly object _lock = new object();
-        private IWebDriver? _webDriver;
+        private static readonly ThreadLocal<IWebDriver> _driver = new ThreadLocal<IWebDriver>();
+
         public static WebDriverManager Instance()
         {
 
@@ -27,44 +28,27 @@ namespace SeleniumWebDriverTask.Core.Utilities
 
         public IWebDriver GetWebDriver(string browserType, bool headless)
         {
-            if (_webDriver != null)
+            if (_driver.Value != null)
             {
-                LoggerHelper.LogInformation("WebDriver instance already exists. Returning the existing instance.");
-                return _webDriver;
+                _driver.Value.Quit();
+                _driver.Value.Dispose();
             }
 
-            lock (_lock)
-            {
-                if (_webDriver == null)
-                {
-                    LoggerHelper.LogInformation("Creating new WebDriver instance.");
-                    _webDriver = BrowserFactory.CreateBrowser(browserType, headless);
-                }
-            }
-            return _webDriver;
+            _driver.Value = BrowserFactory.CreateBrowser(browserType, headless);
+            return _driver.Value;
         }
 
         public void QuitDriver()
         {
-            if (_webDriver != null)
+            if (_driver.Value != null)
             {
                 LoggerHelper.LogInformation("Attempting to close the browser.");
 
-                try
-                {
-                    _webDriver.Quit();
-                    LoggerHelper.LogInformation("Browser closed successfully.");
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogError(ex, "Failed to close the browser properly.");
-                }
-                finally
-                {
-                    _webDriver.Dispose();
-                    _webDriver = null;
-                    LoggerHelper.LogInformation("Driver instance set to null.");
-                }
+                _driver.Value.Quit();
+                LoggerHelper.LogInformation("Browser closed successfully.");
+
+                _driver.Value.Dispose();
+                LoggerHelper.LogInformation("Driver instance is dispose.");
             }
         }
     }

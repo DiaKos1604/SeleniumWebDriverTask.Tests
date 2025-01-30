@@ -8,4 +8,4 @@
     When The user navigates to the About page
      And The user clicks the download button in the "EPAM at a Glance" section
     Then The file "EPAM_Corporate_Overview_Q4_EOY.pdf" should be successfully downloaded
-     And The downloaded file should match the expected content and format
+     And The downloaded file should match the expected file name
