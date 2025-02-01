@@ -21,7 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SeleniumWebDriver.Library\SeleniumWebDriver.Business.csproj" />
     <ProjectReference Include="..\SeleniumWebDriverTask.Core\SeleniumWebDriverTask.Core.csproj" />
-    <ProjectReference Include="..\SeleniumWebDriverTask.Tests\SeleniumWebDriverTask.Tests.csproj" />
   </ItemGroup>
 
 </Project>
