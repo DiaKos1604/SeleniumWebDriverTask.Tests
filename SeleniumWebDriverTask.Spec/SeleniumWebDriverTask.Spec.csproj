@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SeleniumWebDriver.Library\SeleniumWebDriver.Business.csproj" />
+    <ProjectReference Include="..\SeleniumWebDriver.Library\SeleniumWebDriverTask.Business.csproj" />
     <ProjectReference Include="..\SeleniumWebDriverTask.Core\SeleniumWebDriverTask.Core.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Serilog;
 
-namespace SeleniumWebDriver.Business.Pages
+namespace SeleniumWebDriverTask.Business.Pages
 {
     public class HomePage : BasePage
     {

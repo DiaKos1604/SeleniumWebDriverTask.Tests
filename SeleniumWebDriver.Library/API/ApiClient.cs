@@ -3,9 +3,9 @@ using RestSharp.Serializers.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using SeleniumWebDriverTask.Core.Utilities;
-using SeleniumWebDriver.Business.Models;
+using SeleniumWebDriverTask.Business.Models;
 
-namespace SeleniumWebDriver.Business.API
+namespace SeleniumWebDriverTask.Business.API
 {
     public class ApiClient
     {

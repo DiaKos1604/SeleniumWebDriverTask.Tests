@@ -1,8 +1,10 @@
-﻿using SeleniumWebDriver.Business.API;
+﻿using SeleniumWebDriverTask.Business.API;
 using SeleniumWebDriverTask.Core.Utilities;
 using RestSharp;
-using SeleniumWebDriver.Business.Models;
+using SeleniumWebDriverTask.Business.Models;
 using System.Net;
+
+[assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, DisableTestParallelization = false)]
 
 namespace SeleniumWebDriverTask.Tests.TestsAPI
 {
@@ -16,6 +18,7 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         }
 
         [Fact]
+        [Trait("Category", "API")]
         public async Task ValidateGetUsers_ReturnsListOfUsers()
         {
             LoggerHelper.LogInformation("Starting test for ValidateGetUsers_ReturnsListOfUsers");
@@ -57,6 +60,7 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         }
 
         [Fact]
+        [Trait("Category", "API")]
         public async Task ValidateGetUsers_ContentTypeHeader()
         {
             LoggerHelper.LogInformation("Starting test for ValidateGetUsers_ContentTypeHeader");
@@ -73,6 +77,7 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         }
 
         [Fact]
+        [Trait("Category", "API")]
         public async Task ValidateGetUsers_ResponseListOfUsers()
         {
             LoggerHelper.LogInformation("Starting test for ValidateGetUsers_ResponseListOfUsers");
@@ -107,12 +112,16 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         }
 
         [Fact]
+        [Trait("Category", "API")]
         public async Task ValidatePostUsers_CanBeCreated()
         {
             LoggerHelper.LogInformation("Starting test for  ValidatePostUsers_CanBeCreated");
 
             var apiClient = new ApiClient();
-            var newUser = new UserModel { Name = "Doe", Username = "John" };
+            var newUser = new UserBuilder()
+                .WithName("Doe")
+                .WithUsername("John")
+                .Build();
             var response = await _apiClient.CreateUsersAsync(newUser);
 
             var createdUser = await apiClient.CreateUsersAsync(newUser);
@@ -127,6 +136,7 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         }
 
         [Fact]
+        [Trait("Category", "API")]
         public async Task ValidateGetUsers_IfResorceDoseNotExist()
         {
             LoggerHelper.LogInformation("Starting test for ValidateGetUsers_IfResorceDoseNotExist");

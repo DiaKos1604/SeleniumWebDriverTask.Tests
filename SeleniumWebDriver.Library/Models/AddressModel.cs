@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SeleniumWebDriver.Business.Models
+namespace SeleniumWebDriverTask.Business.Models
 {
     public class AddressModel
     {
