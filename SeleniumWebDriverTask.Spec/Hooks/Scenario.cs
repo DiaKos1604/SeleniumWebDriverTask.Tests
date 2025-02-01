@@ -17,27 +17,26 @@ namespace SeleniumWebDriverTask.Spec.Hooks
         [BeforeScenario]
         public void BeforeScenario()
         {
-            try
-            {
-                var browserType = ConfigurationHelper.GetBrowserType();
-                var headless = ConfigurationHelper.GetHeadlessOption();
-                var driver = WebDriverManager.Instance().GetWebDriver(browserType, headless);
-                _scenarioContext["WebDriver"] = driver;
-                _scenarioContext.Set(driver, typeof(IWebDriver).FullName);
-            }
-            catch (Exception ex)
-            {
-                LoggerHelper.LogError(ex, "Error when initializing the web driver.");
-                throw;
-            }
+            int threadId = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine($"BeforeScenario on Thread ID: {threadId}");
+
+            var browserType = ConfigurationHelper.GetBrowserType();
+            var headless = ConfigurationHelper.GetHeadlessOption();
+            var driver = WebDriverManager.Instance().GetWebDriver(browserType, headless);
+
+            _scenarioContext["WebDriver"] = driver;
+            _scenarioContext.Set(driver, typeof(IWebDriver).FullName);
         }
 
         [AfterScenario]
         public void AfterScenario()
         {
-            if (_scenarioContext["WebDriver"] is IWebDriver)
+            int threadId = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine($"AfterScenario on Thread ID: {threadId}");
+
+            if (_scenarioContext["WebDriver"] is IWebDriver driver)
             {
-                WebDriverManager.Instance().QuitDriver();
+                driver.Quit();
             }
             else
             {

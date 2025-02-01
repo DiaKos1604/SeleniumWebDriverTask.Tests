@@ -37,8 +37,8 @@ namespace SeleniumWebDriverTask.Spec.Steps
             _aboutService.ValidateFileDownloaded(fileName);
         }
 
-        [Then(@"The downloaded file should match the expected content and format")]
-        public void ThenTheDownloadedFileShouldMatchTheExpectedContentAndFormat()
+        [Then(@"The downloaded file should match the expected file name")]
+        public void ThenTheDownloadedFileShouldMatchTheExpectedExpectedFileName()
         {
             var expectedFileName = "EPAM_Corporate_Overview_Q4_EOY.pdf";
             var actualFileDownloaded = _aboutService.ValidateFileDownloaded(expectedFileName);

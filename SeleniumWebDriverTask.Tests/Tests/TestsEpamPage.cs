@@ -15,104 +15,88 @@ namespace SeleniumWebDriverTask.Tests.Tests
         [Fact]
         public void ValidateHomePage()
         {
-            AssertionHelper.HandleAssert(() =>
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateHomePage)}.");
-                _navigationService.GoToPage(HomePage.Url);
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateHomePage)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                var homeService = new HomeService(Driver);
-                homeService.ValidateNavigationElementsExist();
-
-            }, Driver);
+            var homeService = new HomeService(Driver);
+            homeService.ValidateNavigationElementsExist();
         }
 
         [Theory]
         [InlineData("C#")]
         public void ValidateJobSearch(string programmingLanguage)
         {
-            AssertionHelper.HandleAssert(() =>
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateJobSearch)}.");
-                _navigationService.GoToPage(HomePage.Url);
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateJobSearch)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                var homeService = new HomeService(Driver);
-                homeService.ClickCareersLink();
+            var homeService = new HomeService(Driver);
+            homeService.ClickCareersLink();
 
-                var careersService = new CareersService(Driver);
-                careersService.ClickFindYourDreamJobLink();
-                careersService.SearchJob(programmingLanguage);
-                careersService.SelectSearchByDate();
-                careersService.ClickViewAndApplyForLatestJob();
+            var careersService = new CareersService(Driver);
+            careersService.ClickFindYourDreamJobLink();
+            careersService.SearchJob(programmingLanguage);
+            careersService.SelectSearchByDate();
+            careersService.ClickViewAndApplyForLatestJob();
 
-                var programingLangElement = careersService.IsProgrammingLangElementDisplayed(programmingLanguage);
+            var programingLangElement = careersService.IsProgrammingLangElementDisplayed(programmingLanguage);
 
-                Assert.True(programingLangElement, $"The programming language for element {programmingLanguage} is not displayed on the Careers page.");
-            }, Driver);
+            Assert.True(programingLangElement, $"The programming language for element {programmingLanguage} is not displayed on the Careers page.");
         }
 
         [Theory]
         [InlineData("Cloud")]
         public void ValidateMagnifierIcon(string searchTerm)
         {
-            AssertionHelper.HandleAssert(() =>
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateMagnifierIcon)}.");
-                _navigationService.GoToPage(HomePage.Url);
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateMagnifierIcon)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                var magnifierIconService = new MagnifierIconService(Driver);
-                magnifierIconService.EnterSearchTerm(searchTerm);
-                magnifierIconService.ClickFindButton();
+            var magnifierIconService = new MagnifierIconService(Driver);
+            magnifierIconService.EnterSearchTerm(searchTerm);
+            magnifierIconService.ClickFindButton();
 
-                var searchResultsDisplayed = magnifierIconService.IsSearchResultsDisplayed(searchTerm);
+            var searchResultsDisplayed = magnifierIconService.IsSearchResultsDisplayed(searchTerm);
 
-                Assert.True(searchResultsDisplayed, $"Search results for '{searchTerm}' are not displayed on the search page.");
-            }, Driver);
+            Assert.True(searchResultsDisplayed, $"Search results for '{searchTerm}' are not displayed on the search page.");
         }
 
         [Fact]
         public void IsFileDownloaded()
         {
-            AssertionHelper.HandleAssert(() =>
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(IsFileDownloaded)}.");
-                _navigationService.GoToPage(HomePage.Url);
+            LoggerHelper.LogInformation($"Starting test: {nameof(IsFileDownloaded)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                var homeService = new HomeService(Driver);
-                homeService.ClickAboutLink();
+            var homeService = new HomeService(Driver);
+            homeService.ClickAboutLink();
 
-                var aboutService = new AboutService(Driver);
-                aboutService.ClickDownloadButton();
+            var aboutService = new AboutService(Driver);
+            aboutService.ClickDownloadButton();
 
-                var expectedFileName = "EPAM_Corporate_Overview_Q4_EOY.pdf";
-                var actualFileDownloaded = aboutService.ValidateFileDownloaded(expectedFileName);
+            var expectedFileName = "EPAM_Corporate_Overview_Q4_EOY.pdf";
+            var actualFileDownloaded = aboutService.ValidateFileDownloaded(expectedFileName);
 
-                Assert.True(actualFileDownloaded, $"The expected file '{expectedFileName}' was not downloaded.");
-            }, Driver);
+            Assert.True(actualFileDownloaded, $"The expected file '{expectedFileName}' was not downloaded.");
         }
 
         [Fact]
         public void ValidateInsightsPage()
         {
-            AssertionHelper.HandleAssert(() =>
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateInsightsPage)}.");
-                _navigationService.GoToPage(HomePage.Url);
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateInsightsPage)}.");
+            _navigationService.GoToPage(HomePage.Url);
 
-                var homeService = new HomeService(Driver);
-                homeService.ClickInsightsLink();
+            var homeService = new HomeService(Driver);
+            homeService.ClickInsightsLink();
 
-                var insightsService = new InsightsService(Driver);
-                insightsService.MoveToSlider();
-                insightsService.SwipeCarousel(2);
+            var insightsService = new InsightsService(Driver);
+            insightsService.MoveToSlider();
+            insightsService.SwipeCarousel(2);
 
-                string articleTitle = insightsService.GetArticleName();
+            string articleTitle = insightsService.GetArticleName();
 
-                insightsService.ClickReadMore();
+            insightsService.ClickReadMore();
 
-                var isCorrectArticle = insightsService.ValidateArticleName(articleTitle);
+            var isCorrectArticle = insightsService.ValidateArticleName(articleTitle);
 
-                Assert.True(isCorrectArticle, $"The article title: {articleTitle} not matches the previously noted title.");
-            }, Driver);
+            Assert.True(isCorrectArticle, $"The article title: {articleTitle} not matches the previously noted title.");
         }
 
         [Theory]
@@ -120,25 +104,22 @@ namespace SeleniumWebDriverTask.Tests.Tests
         [InlineData("Responsible AI")]
         public void ValidateNavigationToGenerativeAI(string serviceCategory)
         {
-            AssertionHelper.HandleAssert(() =>
-            {
-                LoggerHelper.LogInformation($"Starting test: {nameof(ValidateNavigationToGenerativeAI)}.");
+            LoggerHelper.LogInformation($"Starting test: {nameof(ValidateNavigationToGenerativeAI)}.");
 
-                _navigationService.GoToPage(HomePage.Url);
-                var homeService = new HomeService(Driver);
-                homeService.ClickServicesLink();
+            _navigationService.GoToPage(HomePage.Url);
+            var homeService = new HomeService(Driver);
+            homeService.ClickServicesLink();
 
-                var servicesSectionService = new ServicesSectionService(Driver);
-                servicesSectionService.MoveToAILink();
-                servicesSectionService.StopVideo();
-                servicesSectionService.SelectCategory(serviceCategory);
+            var servicesSectionService = new ServicesSectionService(Driver);
+            servicesSectionService.MoveToAILink();
+            servicesSectionService.StopVideo();
+            servicesSectionService.SelectCategory(serviceCategory);
 
-                var isCorrectTitle = servicesSectionService.ValidatePageTitle(serviceCategory);
-                Assert.True(isCorrectTitle, $"The page title does not match the expected title: {serviceCategory}");
+            var isCorrectTitle = servicesSectionService.ValidatePageTitle(serviceCategory);
+            Assert.True(isCorrectTitle, $"The page title does not match the expected title: {serviceCategory}");
 
-                var isOurRelatedSectionDisplayed = servicesSectionService.ValidateOurRelatedExpertiseSectionIsDisplayed();
-                Assert.True(isOurRelatedSectionDisplayed, "The 'Our Related Expertise' section is not displayed on the page.");
-            }, Driver);
+            var isOurRelatedSectionDisplayed = servicesSectionService.ValidateOurRelatedExpertiseSectionIsDisplayed();
+            Assert.True(isOurRelatedSectionDisplayed, "The 'Our Related Expertise' section is not displayed on the page.");
         }
     }
 }
