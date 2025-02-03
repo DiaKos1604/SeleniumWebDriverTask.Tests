@@ -17,6 +17,10 @@ on:
         - 'Chrome'
         - 'Firefox'
         - 'Edge'
+      branch:
+        description: 'Branch to run tests on'
+        required: true
+        default: 'CI/CD_branch'
 
 jobs:
   run-tests:
