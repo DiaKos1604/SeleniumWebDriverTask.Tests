@@ -8,11 +8,11 @@ using System.Net;
 
 namespace SeleniumWebDriverTask.Tests.TestsAPI
 {
-    public class ApiTests
+    public class TestsAPI
     {
         private readonly ApiClient _apiClient;
 
-        public ApiTests()
+        public TestsAPI()
         {
             _apiClient = new ApiClient();
         }
