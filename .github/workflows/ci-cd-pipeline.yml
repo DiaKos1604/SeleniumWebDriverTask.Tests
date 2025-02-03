@@ -35,10 +35,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0'
-
-      - name: Install dependencies
-        run: dotnet restore
-
+          
       - name: Run API Tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
         continue-on-error: true
