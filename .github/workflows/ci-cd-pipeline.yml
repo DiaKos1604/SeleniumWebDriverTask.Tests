@@ -54,14 +54,14 @@ jobs:
              echo "DIR_EXISTS=true" >> $GITHUB_ENV
            fi
       - name: Upload Screenshots
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: env.DIR_EXISTS == 'true' && env.TEST_FAILED == 'true'
         with:
          name: screenshots
          path: '${{ github.workspace }}/Screenshots'
   
       - name: Upload Test Results
-        uses: actions//upload-artifact@v3
+        uses: actions//upload-artifact@v4
         if: always()
         with:
           name: test-results
