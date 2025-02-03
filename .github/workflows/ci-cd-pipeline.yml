@@ -41,7 +41,7 @@ jobs:
         continue-on-error: true
 
       - name: Run UI Tests
-        run: dotnet test --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=UI_TestResults.trx"
+        run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
 
       - name: Check if Tests Failed
         run: |
@@ -52,14 +52,14 @@ jobs:
           if (Test-Path "${{ github.workspace }}\Screenshots") {
             echo "DIR_EXISTS=true" >> $env:GITHUB_ENV
           }
-
-      - name: Upload Test Results
+          
+      - name: Upload dotnet test results
         uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: test-results
-          path: ${{ github.workspace }}/TestResults/*.trx
-
+         name: dotnet-results-${{ matrix.dotnet-version }}
+         path: TestResults-${{ matrix.dotnet-version }}
+         if: ${{ always() }}
+         
       - name: Upload Screenshots
         uses: actions/upload-artifact@v4
         if: env.DIR_EXISTS == 'true' && env.TEST_FAILED == 'true'
