@@ -38,9 +38,6 @@ jobs:
           
       - name: Run API Tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
-         if ($result -ne 'Passed') { 
-         echo "TEST_FAILED=true" >> $env:GITHUB_ENV 
-         }
         continue-on-error: true
 
       - name: Run UI Tests
