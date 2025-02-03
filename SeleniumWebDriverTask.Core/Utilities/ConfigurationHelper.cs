@@ -10,7 +10,7 @@ namespace SeleniumWebDriverTask.Core.Utilities
         static ConfigurationHelper()
         {
             Configuration = new ConfigurationBuilder()
-                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
 
@@ -51,6 +51,11 @@ namespace SeleniumWebDriverTask.Core.Utilities
 
             LoggerHelper.LogInformation($"API Base URL retrieved from configuration: {baseUrl}");
             return baseUrl;
+        }
+
+        public static string GetApplicationUrl()
+        {
+            return Configuration["ApplicationUrl"] ?? throw new InvalidOperationException("ApplicationUrl not configured.");
         }
     }
 }

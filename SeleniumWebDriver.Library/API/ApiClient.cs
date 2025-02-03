@@ -27,17 +27,9 @@ namespace SeleniumWebDriverTask.Business.API
             LoggerHelper.LogInformation($"API Client initialized with base URL: {baseUrl}");
         }
 
-        private RestRequest CreateRequest(string resource, Method method = Method.Get)
-        {
-            var request = new RestRequest(resource, method);
-            request.AddHeader("Accept", "application/json");
-            LoggerHelper.LogInformation($"Creating request for: {resource}");
-            return request;
-        }
-
         public async Task<RestResponse<List<UserModel>>> GetUsersAsync()
         {
-            var request = CreateRequest("/users");
+            var request = new RestRequest("/users", Method.Get);
             var response = await _client.ExecuteAsync<List<UserModel>>(request);
 
             if (response == null) 
@@ -51,7 +43,7 @@ namespace SeleniumWebDriverTask.Business.API
 
         public async Task<RestResponse<UserModel>> CreateUsersAsync(UserModel user)
         {
-            var request = CreateRequest("/users", Method.Post);
+            var request = new RestRequest("/users", Method.Post);
             request.AddJsonBody(user);
 
             var response = await _client.ExecuteAsync<UserModel>(request);
@@ -67,7 +59,7 @@ namespace SeleniumWebDriverTask.Business.API
 
         public async Task<RestResponse> GetInvalidEndpointAsync(string resource)
         {
-            var request = CreateRequest(resource, Method.Get);
+            var request = new RestRequest(resource, Method.Get);
             var response = await _client.ExecuteAsync(request);
 
             if (response == null)

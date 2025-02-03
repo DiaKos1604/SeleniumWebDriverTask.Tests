@@ -22,7 +22,7 @@ namespace SeleniumWebDriverTask.Spec.Steps
         [Given(@"The user is on the EPAM home page")]
         public void GivenTheUserIsOnTheEPAMHomePage()
         {
-            _navigationService.GoToPage(HomePage.Url);
+            _navigationService.GoToPage();
         }
 
         [Then(@"The user validate navigation to main tabs")]

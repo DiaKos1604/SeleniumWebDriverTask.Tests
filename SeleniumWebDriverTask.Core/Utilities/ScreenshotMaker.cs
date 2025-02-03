@@ -2,15 +2,8 @@
 
 namespace SeleniumWebDriverTask.Core.Utilities
 {
-    public class ScreenshotMaker
+    public class ScreenshotMaker()
     {
-        private readonly IWebDriver _driver;
-
-        public ScreenshotMaker(IWebDriver driver)
-        {
-            _driver = driver;
-        }
-
         public static void TakeBrowserScreenshot(ITakesScreenshot driver, string description)
         {
             if (driver is ITakesScreenshot takesScreenshot)
@@ -20,11 +13,8 @@ namespace SeleniumWebDriverTask.Core.Utilities
                 Directory.CreateDirectory(screenshotsDirectory);
                 var screenshotPath = Path.Combine(screenshotsDirectory, $"{description}_{timestamp}.png");
 
-
                 takesScreenshot.GetScreenshot().SaveAsFile(screenshotPath);
                 LoggerHelper.LogInformation($"Screenshot taken: {screenshotPath}.");
-
-                LoggerHelper.LogError($"Failed to take screenshot.");
             }
             else
             {

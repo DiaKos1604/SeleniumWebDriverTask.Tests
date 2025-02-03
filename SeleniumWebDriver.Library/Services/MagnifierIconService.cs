@@ -25,11 +25,12 @@ namespace SeleniumWebDriverTask.Business.Services
             LoggerHelper.LogInformation($"Successfully clicked '{elementName}' element.");
         }
 
+        public void ClickMagnifierIcon() => ClickElement(_page.MagnifierIconLocator, "Magnifier icon");
+
         public void EnterSearchTerm(string searchTerm)
         {
-            _page._waitHelper.WaitForPageLoad();
             var searchInput = _page._waitHelper.WaitForElementToBeClickable(_page.SearchInputLocator);
-            searchInput.Clear();
+            searchInput.Click();
             searchInput.SendKeys(searchTerm);
 
             LoggerHelper.LogInformation($"Search term '{searchTerm}' entered successfully.");

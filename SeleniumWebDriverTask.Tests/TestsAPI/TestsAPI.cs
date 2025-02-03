@@ -22,7 +22,6 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         public async Task ValidateGetUsers_ReturnsListOfUsers()
         {
             LoggerHelper.LogInformation("Starting test for ValidateGetUsers_ReturnsListOfUsers");
-            var apiClient = new ApiClient();
             var response = await _apiClient.GetUsersAsync();
 
             ValidateResponse(response);
@@ -65,7 +64,6 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         {
             LoggerHelper.LogInformation("Starting test for ValidateGetUsers_ContentTypeHeader");
 
-            var apiClient = new ApiClient();
             var response = await _apiClient.GetUsersAsync();
 
             ValidateResponse(response);
@@ -82,7 +80,6 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         {
             LoggerHelper.LogInformation("Starting test for ValidateGetUsers_ResponseListOfUsers");
 
-            var apiClient = new ApiClient();
             var response = await _apiClient.GetUsersAsync();
 
             ValidateResponse(response);
@@ -116,15 +113,11 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         public async Task ValidatePostUsers_CanBeCreated()
         {
             LoggerHelper.LogInformation("Starting test for  ValidatePostUsers_CanBeCreated");
-
-            var apiClient = new ApiClient();
             var newUser = new UserBuilder()
                 .WithName("Doe")
                 .WithUsername("John")
                 .Build();
             var response = await _apiClient.CreateUsersAsync(newUser);
-
-            var createdUser = await apiClient.CreateUsersAsync(newUser);
 
             Assert.NotNull(response);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -141,7 +134,6 @@ namespace SeleniumWebDriverTask.Tests.TestsAPI
         {
             LoggerHelper.LogInformation("Starting test for ValidateGetUsers_IfResorceDoseNotExist");
 
-            var apiClient = new ApiClient();
             var response = await _apiClient.GetInvalidEndpointAsync("/invalidendpoint");
 
             Assert.Null(response.ErrorMessage);

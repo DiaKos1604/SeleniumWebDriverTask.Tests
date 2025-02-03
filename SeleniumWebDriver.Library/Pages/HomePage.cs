@@ -5,8 +5,6 @@ namespace SeleniumWebDriverTask.Business.Pages
 {
     public class HomePage : BasePage
     {
-        public const string Url = "https://www.epam.com/";
-
         public HomePage(IWebDriver driver) : base(driver)
         {
         }

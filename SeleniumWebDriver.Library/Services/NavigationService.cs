@@ -1,5 +1,7 @@
 ﻿using OpenQA.Selenium;
+using SeleniumWebDriverTask.Core.Utilities;
 using Serilog;
+using System.Configuration;
 
 namespace SeleniumWebDriverTask.Business.Services
 {
@@ -12,8 +14,10 @@ namespace SeleniumWebDriverTask.Business.Services
             _driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
 
-        public void GoToPage(string url)
+        public void GoToPage()
         {
+            string url = ConfigurationHelper.GetApplicationUrl();
+
             if (string.IsNullOrWhiteSpace(url))
             {
                 throw new ArgumentException("URL cannot be null or empty.", nameof(url));
