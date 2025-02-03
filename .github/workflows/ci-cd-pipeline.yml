@@ -38,15 +38,22 @@ jobs:
           
       - name: Run API Tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
+         if ($result -ne 'Passed') { 
+         echo "TEST_FAILED=true" >> $env:GITHUB_ENV 
+         }
         continue-on-error: true
 
       - name: Run UI Tests
-        run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
-
-      - name: Check if Tests Failed
         run: |
-          if ($LASTEXITCODE -ne 0) { echo "TEST_FAILED=true" >> $env:GITHUB_ENV }
-
+          $result = dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+          if ($result -ne 'Passed') { 
+          echo "TEST_FAILED=true" >> $env:GITHUB_ENV 
+          }
+          
+          run: |
+          if ($LASTEXITCODE -ne 0) { 
+          echo "TEST_FAILED=true" >> $env:GITHUB_ENV 
+          }
       - name: Check if Screenshots directory exists
         run: |
           if (Test-Path "${{ github.workspace }}\Screenshots") {
@@ -65,4 +72,4 @@ jobs:
         if: env.DIR_EXISTS == 'true' && env.TEST_FAILED == 'true'
         with:
           name: screenshots
-          path: ${{ github.workspace }}/Screenshots
+          path: ${{ github.workspace }}/Screenshots 
