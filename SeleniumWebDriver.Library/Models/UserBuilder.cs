@@ -2,7 +2,7 @@
 {
     public class UserBuilder
     {
-        public UserModel _user = new UserModel();
+        public UserModel _user = new ();
 
         public UserBuilder WithName(string name)
         {
