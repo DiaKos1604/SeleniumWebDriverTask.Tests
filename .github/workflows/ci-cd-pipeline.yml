@@ -1,0 +1,68 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - CI/CD_branch 
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Browser Type'
+        required: true
+        default: 'Chrome'
+        type: choice
+        options: 
+        - 'Chrome'
+        - 'Firefox'
+        - 'Edge'
+
+jobs:
+  run-tests:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0'
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: API Tests
+        run: dotnet test --filter "Category=API"
+        working-directory: dotnet test F:\Diana\epam\SeleniumWebDriverTask.Tests\SeleniumWebDriverTask.Tests
+
+      - name: UI Tests
+        run: dotnet test -- TestRunParameters.Parameter(name='browser', value='${{ github.event.inputs.browser }}')
+        env:
+           BROWSER_TYPE: ${{ github.event.inputs.browser }}
+           SELENIUM_HEADLESS: 'true'
+           
+      - name: Run tests
+        run: |
+           dotnet test || echo "TEST_FAILED=true" >> $GITHUB_ENV
+           
+      - name: Check if Screenshots directory exists
+        run: |
+           if [ -d "${{ github.workspace }}/Screenshots" ] 
+           then
+             echo "DIR_EXISTS=true" >> $GITHUB_ENV
+           fi
+      - name: Upload Screenshots
+        uses: actions/upload-artifact@v2
+        if: env.DIR_EXISTS == 'true' && env.TEST_FAILED == 'true'
+        with:
+         name: screenshots
+         path: '${{ github.workspace }}/Screenshots'
+  
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results
+          path: ${{ github.workspace }}/TestResults
