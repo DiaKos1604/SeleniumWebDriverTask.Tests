@@ -14,9 +14,9 @@ on:
         default: 'Chrome'
         type: choice
         options: 
-        - 'Chrome'
-        - 'Firefox'
-        - 'Edge'
+          - 'Chrome'
+          - 'Firefox'
+          - 'Edge'
       branch:
         description: 'Branch to run tests on'
         required: true
@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
@@ -39,33 +41,35 @@ jobs:
 
       - name: API Tests
         run: dotnet test --filter "Category=API"
-        working-directory: dotnet test F:\Diana\epam\SeleniumWebDriverTask.Tests\SeleniumWebDriverTask.Tests\TestsAPI\TestsAPI.cs
+        working-directory: ${{ github.workspace }}
 
       - name: UI Tests
         run: dotnet test -- TestRunParameters.Parameter(name='browser', value='${{ github.event.inputs.browser }}')
         env:
-           BROWSER_TYPE: ${{ github.event.inputs.browser }}
-           SELENIUM_HEADLESS: 'true'
-           
+          BROWSER_TYPE: ${{ github.event.inputs.browser }}
+          SELENIUM_HEADLESS: 'true'
+        working-directory: ${{ github.workspace }}
+
       - name: Run tests
         run: |
-           dotnet test || echo "TEST_FAILED=true" >> $GITHUB_ENV
-           
+          dotnet test || echo "TEST_FAILED=true" >> $GITHUB_ENV
+        working-directory: ${{ github.workspace }}
+
       - name: Check if Screenshots directory exists
         run: |
-           if [ -d "${{ github.workspace }}/Screenshots" ] 
-           then
-             echo "DIR_EXISTS=true" >> $GITHUB_ENV
-           fi
+          if [ -d "${{ github.workspace }}/Screenshots" ]; then
+            echo "DIR_EXISTS=true" >> $GITHUB_ENV
+          fi
+
       - name: Upload Screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         if: env.DIR_EXISTS == 'true' && env.TEST_FAILED == 'true'
         with:
-         name: screenshots
-         path: '${{ github.workspace }}/Screenshots'
-  
+          name: screenshots
+          path: ${{ github.workspace }}/Screenshots
+
       - name: Upload Test Results
-        uses: actions//upload-artifact@v4
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results
