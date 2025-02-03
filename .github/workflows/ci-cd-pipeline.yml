@@ -35,7 +35,7 @@ jobs:
 
       - name: API Tests
         run: dotnet test --filter "Category=API"
-        working-directory: dotnet test F:\Diana\epam\SeleniumWebDriverTask.Tests\SeleniumWebDriverTask.Tests
+        working-directory: dotnet test F:\Diana\epam\SeleniumWebDriverTask.Tests\SeleniumWebDriverTask.Tests\TestsAPI\TestsAPI.cs
 
       - name: UI Tests
         run: dotnet test -- TestRunParameters.Parameter(name='browser', value='${{ github.event.inputs.browser }}')
