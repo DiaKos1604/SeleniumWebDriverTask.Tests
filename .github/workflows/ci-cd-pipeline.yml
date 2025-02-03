@@ -41,7 +41,7 @@ jobs:
 
       - name: API Tests
         run: dotnet test --filter "Category=API"
-        working-directory: ${{ github.workspace }}/SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests
+        working-directory: ${{ github.workspace }}/SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests.Tests
         
       - name: UI Tests
         run: dotnet test -- TestRunParameters.Parameter(name='browser', value='${{ github.event.inputs.browser }}')
