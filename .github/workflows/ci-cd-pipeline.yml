@@ -54,7 +54,7 @@ jobs:
              echo "DIR_EXISTS=true" >> $GITHUB_ENV
            fi
       - name: Upload Screenshots
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: env.DIR_EXISTS == 'true' && env.TEST_FAILED == 'true'
         with:
          name: screenshots
