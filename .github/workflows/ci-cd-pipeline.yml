@@ -39,33 +39,28 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
 
-      - name: API Tests
+      - name: Run API Tests
         run: dotnet test --filter "Category=API"
-        working-directory: ${{ github.workspace }}/SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests.Tests
+        working-directory: ${{ github.workspace }}/SeleniumWebDriverTask.Tests/TestsAPI
         
       - name: UI Tests
-        run: dotnet test -- TestRunParameters.Parameter(name='browser', value='${{ github.event.inputs.browser }}')
+        run: dotnet test
         env:
-          BROWSER_TYPE: ${{ github.event.inputs.browser }}
-          SELENIUM_HEADLESS: 'true'
+           BROWSER_TYPE: ${{ github.event.inputs.browser }}
+           SELENIUM_HEADLESS: 'true'
         working-directory: ${{ github.workspace }}
-        
+
       - name: Upload Test Results (if applicable)
         uses: actions/upload-artifact@v4
         with:
-         name: test-results
-         path: ${{ github.workspace }}/TestResults/**/*.xml
+          name: test-results
+          path: ${{ github.workspace }}/TestResults/**/*.xml
 
-      - name: Run tests
+      - name: Check if Screenshots directory exists (Windows PowerShell)
         run: |
-          dotnet test || echo "TEST_FAILED=true" >> $GITHUB_ENV
-        working-directory: ${{ github.workspace }}
-
-      - name: Check if Screenshots directory exists
-        run: |
-          if [ -d "${{ github.workspace }}/Screenshots" ]; then
-            echo "DIR_EXISTS=true" >> $GITHUB_ENV
-          fi
+          if (Test-Path "${{ github.workspace }}\Screenshots") {
+            echo "DIR_EXISTS=true" >> $env:GITHUB_ENV
+          }
 
       - name: Upload Screenshots
         uses: actions/upload-artifact@v4
@@ -80,3 +75,4 @@ jobs:
         with:
           name: test-results
           path: ${{ github.workspace }}/TestResults
+
