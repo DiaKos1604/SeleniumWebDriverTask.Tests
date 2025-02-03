@@ -41,7 +41,7 @@ jobs:
 
       - name: Run API Tests
         run: dotnet test --filter "Category=API"
-        working-directory: ${{ github.workspace }}/TestsAPI
+        working-directory: ${{ github.workspace }}
         continue-on-error: true 
          
       - name: UI Tests
