@@ -41,7 +41,7 @@ jobs:
 
       - name: API Tests
         run: dotnet test --filter "Category=API"
-        working-directory: ${{ github.workspace }}
+        working-directory: ${{ github.workspace }}/SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests
 
       - name: UI Tests
         run: dotnet test -- TestRunParameters.Parameter(name='browser', value='${{ github.event.inputs.browser }}')
@@ -49,6 +49,12 @@ jobs:
           BROWSER_TYPE: ${{ github.event.inputs.browser }}
           SELENIUM_HEADLESS: 'true'
         working-directory: ${{ github.workspace }}
+        
+      - name: Upload Test Results (if applicable)
+        uses: actions/upload-artifact@v3
+        with:
+         name: test-results
+         path: ${{ github.workspace }}/TestResults/**/*.xml
 
       - name: Run tests
         run: |
