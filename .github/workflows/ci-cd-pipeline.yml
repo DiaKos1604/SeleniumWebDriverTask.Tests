@@ -45,7 +45,6 @@ jobs:
 
       - name: Run API tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx" --no-build
-        continue-on-error: true
 
       - name: Run UI Tests (SpecFlow and Traditional Tests)
         run: |
