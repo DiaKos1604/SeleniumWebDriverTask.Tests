@@ -52,7 +52,7 @@ jobs:
         continue-on-error: true
  
       - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: TestResults
           path: |
@@ -66,7 +66,7 @@ jobs:
         shell: pwsh
 
       - name: Upload Screenshots
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: env.DIR_EXISTS == 'true'
         with:
           name: Screenshots
