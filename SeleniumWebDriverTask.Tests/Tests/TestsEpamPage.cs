@@ -1,6 +1,7 @@
 ﻿using SeleniumWebDriverTask.Business.Pages;
 using SeleniumWebDriverTask.Business.Services;
 using SeleniumWebDriverTask.Core.Utilities;
+using System.ComponentModel;
 
 namespace SeleniumWebDriverTask.Tests.Tests
 {
@@ -12,7 +13,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
             _navigationService = new NavigationService(_driver);
         }
 
-        [Fact]
+        [Fact, Category("UI")]
         public void ValidateHomePage()
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateHomePage)}.");
@@ -22,7 +23,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
             homeService.ValidateNavigationElementsExist();
         }
 
-        [Theory]
+        [Theory, Category("UI")]
         [InlineData("C#")]
         public void ValidateJobSearch(string programmingLanguage)
         {
@@ -43,7 +44,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
             Assert.True(programingLangElement, $"The programming language for element {programmingLanguage} is not displayed on the Careers page.");
         }
 
-        [Theory]
+        [Theory, Category("UI")]
         [InlineData("Cloud")]
         public void ValidateMagnifierIcon(string searchTerm)
         {
@@ -60,7 +61,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
             Assert.True(searchResultsDisplayed, $"Search results for '{searchTerm}' are not displayed on the search page.");
         }
 
-        [Fact]
+        [Fact, Category("UI")]
         public void IsFileDownloaded()
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(IsFileDownloaded)}.");
@@ -78,7 +79,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
             Assert.True(actualFileDownloaded, $"The expected file '{expectedFileName}' was not downloaded.");
         }
 
-        [Fact]
+        [Fact, Category("UI")]
         public void ValidateInsightsPage()
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateInsightsPage)}.");
@@ -100,7 +101,7 @@ namespace SeleniumWebDriverTask.Tests.Tests
             Assert.True(isCorrectArticle, $"The article title: {articleTitle} not matches the previously noted title.");
         }
 
-        [Theory]
+        [Theory, Category("UI")]
         [InlineData("Generative AI")]
         [InlineData("Responsible AI")]
         public void ValidateNavigationToGenerativeAI(string serviceCategory)
