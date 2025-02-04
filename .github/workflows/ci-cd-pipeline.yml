@@ -36,6 +36,15 @@ jobs:
         with:
           dotnet-version: '8.0'
           
+      - name: Setup Chrome and ChromeDriver
+        uses: browser-actions/setup-chrome@v1
+        with:
+         chrome-version: 'latest'
+         
+      - name: Install ChromeDriver
+        uses: actions/setup-chromedriver@v1
+
+          
       - name: Restore Dependencies
         run: dotnet restore
 
