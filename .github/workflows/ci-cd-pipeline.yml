@@ -23,51 +23,43 @@ on:
         default: 'CI/CD_branch'
 
 jobs:
-  run-tests:
+  build-and-test:
+    name: Build and Tests
     runs-on: windows-latest
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.branch }}
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '8.0'
-          
-      - name: Restore Dependencies
-        run: dotnet restore
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x'
 
-      - name: Build Project
-        run: dotnet build --no-restore   
-      - name: Run API tests
-        run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
-        continue-on-error: true
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: .
 
-      - name: Run UI Tests (SpecFlow and Traditional Tests)
-        run: |
-          dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
-          dotnet test --filter "FullyQualifiedName~Tests.TestsEpamPage" --logger "trx;LogFileName=UI_TestResults.trx"
-        continue-on-error: true
- 
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: TestResults
-          path: |
-            **/*.trx
-            TestResults
-          if: always()
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: .
 
-      - name: Check and Upload Screenshots
-        run: |
-          if (Test-Path "${{ github.workspace }}/Screenshots") { echo "DIR_EXISTS=true" >> $env:GITHUB_ENV }
-        shell: pwsh
+    - name: Run API Tests
+      run: dotnet test SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests.csproj --filter Category=API --no-build
+      working-directory:  .
 
-      - name: Upload Screenshots
-        uses: actions/upload-artifact@v4
-        if: env.DIR_EXISTS == 'true'
-        with:
-          name: Screenshots
-          path: ${{ github.workspace }}/Screenshots
+    - name: Run UI Tests
+      if: always()
+      run: dotnet test SeleniumWebDriverTask.Tests --filter Category=Tests --no-build
+      env:
+        BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
+      working-directory: .
+
+    - name: Publish Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: |
+          **/TestResults
+          **/Screenshots
+          **/*.trx
