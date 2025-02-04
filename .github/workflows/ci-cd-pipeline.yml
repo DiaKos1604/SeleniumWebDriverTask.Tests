@@ -36,16 +36,12 @@ jobs:
         with:
           dotnet-version: '8.0'
           
-      - name: Run API Tests
+      - name: Run API tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
         continue-on-error: true
 
-      - name: Run tests in parallel
-        run: dotnet test --filter "FullyQualifiedName~MyNamespace.AlphabeticalTests"
-        continue-on-error: true
-        
-      - name: Run SpecFlow tests
-        run: dotnet test SeleniumWebDriverTask.Tests.Spec --no-build
+      - name: Run UI tests
+        run: dotnet test --filter "FullyQualifiedName~SeleniumWebDriverTask.Tests.AlphabeticalTests"
  
       - name: Check if Tests Failed
         run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
