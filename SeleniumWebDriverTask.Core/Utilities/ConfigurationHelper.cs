@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RestSharp;
 
 namespace SeleniumWebDriverTask.Core.Utilities
 {
@@ -9,6 +10,7 @@ namespace SeleniumWebDriverTask.Core.Utilities
         static ConfigurationHelper()
         {
             Configuration = new ConfigurationBuilder()
+                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
 
@@ -35,6 +37,20 @@ namespace SeleniumWebDriverTask.Core.Utilities
                 LoggerHelper.LogWarning($"Failed to parse headless option from configuration: {headlessConfig}");
             }
             return headless;
+        }
+
+        public static string GetApiBaseUrl()
+        {
+            string baseUrl = Configuration["AppSettings:BaseUrl"] ?? throw new InvalidOperationException("BaseUrl is not configured in appsettings.json.");
+
+            if (string.IsNullOrEmpty(baseUrl))
+            {
+                LoggerHelper.LogError("BaseUrl is not configured in appsettings.json.");
+                throw new InvalidOperationException("BaseUrl is required in appsettings.json.");
+            }
+
+            LoggerHelper.LogInformation($"API Base URL retrieved from configuration: {baseUrl}");
+            return baseUrl;
         }
     }
 }

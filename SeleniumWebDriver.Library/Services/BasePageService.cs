@@ -1,6 +1,6 @@
-﻿using SeleniumWebDriver.Business.Pages;
+﻿using SeleniumWebDriverTask.Business.Pages;
 
-namespace SeleniumWebDriver.Business.Services
+namespace SeleniumWebDriverTask.Business.Services
 {
     public class BasePageService<T> where T : BasePage
     {

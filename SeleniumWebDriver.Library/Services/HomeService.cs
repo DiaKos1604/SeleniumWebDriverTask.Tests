@@ -1,8 +1,8 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Business.Pages;
+using SeleniumWebDriverTask.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
 
-namespace SeleniumWebDriver.Business.Services
+namespace SeleniumWebDriverTask.Business.Services
 {
     public class HomeService
     {

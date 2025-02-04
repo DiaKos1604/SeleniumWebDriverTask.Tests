@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Business.Pages;
-using SeleniumWebDriver.Business.Services;
+using SeleniumWebDriverTask.Business.Pages;
+using SeleniumWebDriverTask.Business.Services;
 using TechTalk.SpecFlow;
 
 namespace SeleniumWebDriverTask.Spec.Steps

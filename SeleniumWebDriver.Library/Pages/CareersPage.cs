@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace SeleniumWebDriver.Business.Pages
+namespace SeleniumWebDriverTask.Business.Pages
 {
     public class CareersPage : BasePage
     {

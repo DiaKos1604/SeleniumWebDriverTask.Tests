@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Serilog;
 
-namespace SeleniumWebDriver.Business.Services
+namespace SeleniumWebDriverTask.Business.Services
 {
     public class NavigationService
     {

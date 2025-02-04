@@ -2,7 +2,7 @@
 using SeleniumWebDriverTask.Core.Utilities;
 using Serilog;
 
-namespace SeleniumWebDriver.Business.Pages
+namespace SeleniumWebDriverTask.Business.Pages
 {
     public abstract class BasePage
     {

@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumWebDriverTask.Tests
 		{4DAAA8B8-60B6-4642-B56A-2D11B73F6225} = {4DAAA8B8-60B6-4642-B56A-2D11B73F6225}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumWebDriver.Business", "SeleniumWebDriver.Library\SeleniumWebDriver.Business.csproj", "{4DAAA8B8-60B6-4642-B56A-2D11B73F6225}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumWebDriverTask.Business", "SeleniumWebDriver.Library\SeleniumWebDriverTask.Business.csproj", "{4DAAA8B8-60B6-4642-B56A-2D11B73F6225}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumWebDriverTask.Core", "SeleniumWebDriverTask.Core\SeleniumWebDriverTask.Core.csproj", "{00FA4A5F-EB83-4DEC-9FE4-1FC63899D128}"
 EndProject

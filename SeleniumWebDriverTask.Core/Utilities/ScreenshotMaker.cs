@@ -20,15 +20,11 @@ namespace SeleniumWebDriverTask.Core.Utilities
                 Directory.CreateDirectory(screenshotsDirectory);
                 var screenshotPath = Path.Combine(screenshotsDirectory, $"{description}_{timestamp}.png");
 
-                try
-                {
-                    takesScreenshot.GetScreenshot().SaveAsFile(screenshotPath);
-                    LoggerHelper.LogInformation($"Screenshot taken: {screenshotPath}.");
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogError(ex, $"Failed to take screenshot.");
-                }
+
+                takesScreenshot.GetScreenshot().SaveAsFile(screenshotPath);
+                LoggerHelper.LogInformation($"Screenshot taken: {screenshotPath}.");
+
+                LoggerHelper.LogError($"Failed to take screenshot.");
             }
             else
             {
