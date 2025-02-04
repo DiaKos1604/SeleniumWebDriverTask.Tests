@@ -27,52 +27,42 @@ jobs:
     name: Build and Tests
     runs-on: windows-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
+      - name: Check out repo
+        uses: actions/checkout@v2
+        with:
           ref: ${{ github.event.inputs.branch }}
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0'
+          
+      - name: Restore Dependencies
+        run: dotnet restore
 
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: .
+      - name: Build Project
+        run: dotnet build --no-restore  
 
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: .
+      - name: Run API tests
+        run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx" --no-build
+        continue-on-error: true
 
-    - name: Run API tests
-      run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx" --no-build
-      working-directory: ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests.TestsAPI
-      continue-on-error: true
+      - name: Run UI Tests (SpecFlow and Traditional Tests)
+        run: |
+          dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
+          dotnet test --filter "Category=UI" --logger "trx;LogFileName=UI_TestResults.trx" --no-build
+          continue-on-error: true
+           env:
+           BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
+           HEADLESS: ${{ github.event.inputs.headless || 'true' }}
+        working-directory: .
 
-    - name: Run UI Tests
-      run: dotnet test --filter "Category=UI" --logger "trx;LogFileName=UI_TestResults.trx" --no-build
-      working-directory: ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests.Tests
-      continue-on-error: true
-      
-    - name: Run SpecFlow Tests
-      run: dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_SpecFlow_TestResults.trx"
- 
-    - name: Upload Test Results
-      uses: actions/upload-artifact@v4
-      with:
-          name: TestResults
-          path: |
-            **/*.trx
-            TestResults
-          if: always()
-
-    - name: Publish Test Results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results
-        path: |
+      - name: Publish Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+         name: test-results
+         path: |
           **/TestResults
           **/Screenshots
           **/*.trx
