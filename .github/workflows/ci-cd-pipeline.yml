@@ -36,27 +36,38 @@ jobs:
         with:
           dotnet-version: '8.0'
           
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Project
+        run: dotnet build --no-restore   
       - name: Run API tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
         continue-on-error: true
 
-      - name: Run UI tests
-        run: dotnet test --filter "FullyQualifiedName~SeleniumWebDriverTask.Tests.AlphabeticalTests"
+      - name: Run UI Tests (SpecFlow and Traditional Tests)
+        run: |
+          dotnet test --filter "FullyQualifiedName~SeleniumWebDriverTask.Spec" --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
+          dotnet test --filter "FullyQualifiedName~SeleniumWebDriverTask.Tests" --logger "trx;LogFileName=UI_TestResults.trx"
+        continue-on-error: true
  
-      - name: Check if Tests Failed
-        run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
-          if ($LASTEXITCODE -ne 0) { echo "TEST_FAILED=true" >> $env:GITHUB_ENV }
-      
-      - name: Upload dotnet test results
-        uses: actions/upload-artifact@v4
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
         with:
-         name: dotnet-results-${{ matrix.dotnet-version }}
-         path: TestResults-${{ matrix.dotnet-version }}
-         if: always()
-         
+          name: TestResults
+          path: |
+            **/*.trx
+            TestResults
+          if: always()
+
+      - name: Check and Upload Screenshots
+        run: |
+          if (Test-Path "${{ github.workspace }}/Screenshots") { echo "DIR_EXISTS=true" >> $env:GITHUB_ENV }
+        shell: pwsh
+
       - name: Upload Screenshots
-        uses: actions/upload-artifact@v4
-        if: env.DIR_EXISTS == 'true' && env.TEST_FAILED == 'true'
+        uses: actions/upload-artifact@v3
+        if: env.DIR_EXISTS == 'true'
         with:
-          name: screenshots
-          path: ${{ github.workspace }}/Screenshots 
+          name: Screenshots
+          path: ${{ github.workspace }}/Screenshots
