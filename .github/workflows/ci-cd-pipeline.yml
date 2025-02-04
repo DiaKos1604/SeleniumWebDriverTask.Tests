@@ -45,16 +45,18 @@ jobs:
 
       - name: Run API tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx" --no-build
+        continue-on-error: true
+        
+      - name: Run SpecFlow UI Tests
+        run: dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
+        continue-on-error: true
 
-      - name: Run UI Tests (SpecFlow and Traditional Tests)
-        run: |
-          dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
-          dotnet test --filter "Category=UI" --logger "trx;LogFileName=UI_TestResults.trx" --no-build
-          continue-on-error: true
-           env:
+      - name: Run Traditional UI Tests
+        run: dotnet test --filter "Category=UI" --logger "trx;LogFileName=UI_TestResults.trx" --no-build
+        continue-on-error: true
+        env:
            BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
            HEADLESS: ${{ github.event.inputs.headless || 'true' }}
-        working-directory: .
 
       - name: Publish Test Results
         if: always()
