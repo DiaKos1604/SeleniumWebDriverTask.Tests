@@ -40,23 +40,10 @@ jobs:
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
         continue-on-error: true
 
-      - name: Run UI Tests
-        run: |
-          $result = dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
-          if ($result -ne 'Passed') { 
-          echo "TEST_FAILED=true" >> $env:GITHUB_ENV 
-          }
-          
-          run: |
-          if ($LASTEXITCODE -ne 0) { 
-          echo "TEST_FAILED=true" >> $env:GITHUB_ENV 
-          }
-      - name: Check if Screenshots directory exists
-        run: |
-          if (Test-Path "${{ github.workspace }}\Screenshots") {
-            echo "DIR_EXISTS=true" >> $env:GITHUB_ENV
-          }
-          
+      - name: Check if Tests Failed
+        run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+          if ($LASTEXITCODE -ne 0) { echo "TEST_FAILED=true" >> $env:GITHUB_ENV }
+      
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v4
         with:
