@@ -40,6 +40,13 @@ jobs:
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
         continue-on-error: true
 
+      - name: Run tests in parallel
+        run: dotnet test --filter "FullyQualifiedName~MyNamespace.AlphabeticalTests"
+        continue-on-error: true
+        
+      - name: Run SpecFlow tests
+        run: dotnet test SeleniumWebDriverTask.Tests.Spec --no-build
+ 
       - name: Check if Tests Failed
         run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
           if ($LASTEXITCODE -ne 0) { echo "TEST_FAILED=true" >> $env:GITHUB_ENV }
