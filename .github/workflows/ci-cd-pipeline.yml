@@ -23,6 +23,9 @@ jobs:
     name: Build and Tests
     runs-on: windows-latest
     steps:
+     - name: Checkout code
+       uses: actions/checkout@v2
+        
      - name: Setup .NET
        uses: actions/setup-dotnet@v1
        with:
