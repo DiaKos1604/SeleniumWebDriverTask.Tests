@@ -3,7 +3,7 @@ name: CI Pipeline
 on:
   pull_request:
     branches:
-      - CI/CD_branch  
+      - master
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
@@ -39,7 +39,7 @@ jobs:
         
      - name: Run UI Tests (SpecFlow and Traditional Tests)
        run: |
-          dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
+          dotnet test ./SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
           dotnet test --filter "FullyQualifiedName~Tests.TestsEpamPage" --logger "trx;LogFileName=UI_TestResults.trx"
        continue-on-error: true
        env:
