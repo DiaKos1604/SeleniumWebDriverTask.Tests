@@ -37,7 +37,7 @@ jobs:
         
      - name: Run UI Tests (SpecFlow and Traditional Tests)
        run: |
-          dotnet test ./SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
+          dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
           dotnet test --filter "FullyQualifiedName~Tests.TestsEpamPage" --logger "trx;LogFileName=UI_TestResults.trx"
        continue-on-error: true
        env:
