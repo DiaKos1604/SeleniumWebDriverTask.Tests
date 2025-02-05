@@ -27,6 +27,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.branch }}
+          fetch-depth: 0 
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
@@ -37,7 +38,7 @@ jobs:
         run: dotnet build --configuration Release    
       
       - name: Run API tests
-        run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx" --no-build
+        run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
         continue-on-error: true
         
       - name: Run UI Tests (SpecFlow and Traditional Tests)
