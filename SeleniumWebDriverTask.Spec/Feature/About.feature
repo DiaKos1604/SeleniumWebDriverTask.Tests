@@ -4,6 +4,7 @@
    Background:
   Given The user is on the EPAM home page
 
+  @TestFilter
   Scenario Outline: User can download the EPAM Corporate Overview file
     When The user navigates to the About page
      And The user clicks the download button in the "EPAM at a Glance" section

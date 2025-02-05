@@ -4,6 +4,7 @@
   Background:
   Given The user is on the EPAM home page
 
+  @TestFilter
   Scenario Outline: View and verify the latest job posting details after searching
     When The user navigates to the Careers page
     Then The user clicks the 'Find Your Dream Job' link

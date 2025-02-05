@@ -4,6 +4,7 @@
   Background:
    Given The user is on the EPAM home page
 
+  @TestFilter
   Scenario Outline: User navigates to the Insights page and interacts with the carousel
     When The user navigates to the Insights page
      And The user moves to the slider

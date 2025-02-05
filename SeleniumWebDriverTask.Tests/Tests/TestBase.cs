@@ -1,12 +1,12 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Business.Pages;
+using SeleniumWebDriverTask.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
 
-namespace SeleniumWebDriverTask.Tests
+namespace SeleniumWebDriverTask.Tests.Tests
 {
     public abstract class TestBase : IDisposable
     {
-        protected IWebDriver Driver;
+        protected IWebDriver _driver;
 
         protected HomePage _homePage;
         protected CareersPage _careersPage;
@@ -17,25 +17,32 @@ namespace SeleniumWebDriverTask.Tests
 
         protected TestBase(WebDriverManager webDriverManager)
         {
-            Driver = webDriverManager.GetWebDriver(
+            _driver = webDriverManager.GetWebDriver(
                     ConfigurationHelper.GetBrowserType(),
                     ConfigurationHelper.GetHeadlessOption());
             LoggerHelper.LogInformation("TestBase initialized.");
 
-            _homePage = new HomePage(Driver);
-            _careersPage = new CareersPage(Driver);
-            _magnifierIconPage = new MagnifierIconPage(Driver);
-            _aboutPage = new AboutPage(Driver);
-            _insightsPage = new InsightsPage(Driver);
-            _servicesSectionPage = new ServicesSectionPage(Driver);
+            _homePage = new HomePage(_driver);
+            _careersPage = new CareersPage(_driver);
+            _magnifierIconPage = new MagnifierIconPage(_driver);
+            _aboutPage = new AboutPage(_driver);
+            _insightsPage = new InsightsPage(_driver);
+            _servicesSectionPage = new ServicesSectionPage(_driver);
         }
 
         public void Dispose()
         {
+            if (XunitContext.Context?.TestException != null)
+            {
+                LoggerHelper.LogInformation("Test failed. Taking screenshot.");
+                ScreenshotMaker.TakeBrowserScreenshot((ITakesScreenshot)_driver, "TestFailure");
+            }
+
             LoggerHelper.LogInformation("Disposing TestBase and quitting WebDriver.");
             WebDriverManager.Instance().QuitDriver();
 
             LoggerHelper.CloseAndFlush();
+            GC.SuppressFinalize(this);
             LoggerHelper.LogInformation("WebDriver quit and resources cleaned up.");
         }
     }

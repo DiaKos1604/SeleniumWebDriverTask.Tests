@@ -4,6 +4,7 @@
   Background:
     Given The user is on the EPAM home page  
 
+  @TestFilter
   Scenario Outline: Navigate to Services Page and validate AI categories  
     When The user navigates to the Services page  
      And The user moves to the Artificial Intelligence link
