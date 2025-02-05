@@ -17,11 +17,7 @@ on:
           - 'Chrome'
           - 'Firefox'
           - 'Edge'
-      branch:
-           description: 'Branch to run tests on'
-           required: true
-           default: 'CI/CD_branch'
-     
+    
 jobs:
   build-and-test:
     name: Build and Tests
@@ -36,6 +32,9 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0'
+          
+      - name: Build the solution
+        run: dotnet build --configuration Release    
       
       - name: Run API tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx" --no-build
