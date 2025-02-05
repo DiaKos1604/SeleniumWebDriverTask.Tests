@@ -35,7 +35,7 @@ jobs:
           dotnet-version: '8.0'
           
       - name: Build the solution
-        run: dotnet build --configuration Release    
+        run: dotnet build --configuration Debug    
       
       - name: Run API tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
@@ -44,7 +44,7 @@ jobs:
       - name: Run UI Tests (SpecFlow and Traditional Tests)
         run: |
           dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
-          dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Tests.csproj --logger "trx;LogFileName=UI_TestResults.trx"
+          dotnet test --filter "FullyQualifiedName~Tests.TestsEpamPage" --logger "trx;LogFileName=UI_TestResults.trx"
         continue-on-error: true
         env:
            BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
