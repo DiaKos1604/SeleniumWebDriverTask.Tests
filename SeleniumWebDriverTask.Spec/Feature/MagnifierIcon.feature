@@ -3,6 +3,7 @@
 Background:
    Given The user is on the EPAM home page
 
+@TestFilter
 Scenario Outline: Navigate to magnifier icon and input search term
     When The user navigates to the Magnifier icon page
     Then The user enters in the search field "<searchTerm>"
