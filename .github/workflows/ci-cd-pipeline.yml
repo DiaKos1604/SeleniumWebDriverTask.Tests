@@ -28,14 +28,14 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0 
-
+          
+      - name: List repo files
+        run: dir /s
+        
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.0'
-          
-      - name: Build the solution
-        run: dotnet build --configuration Debug    
       
       - name: Run API tests
         run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
