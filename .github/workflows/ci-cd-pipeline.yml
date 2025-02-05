@@ -29,9 +29,6 @@ jobs:
           ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0 
           
-      - name: List repo files
-        run: dir /s
-        
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
