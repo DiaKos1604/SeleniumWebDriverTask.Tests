@@ -1,12 +1,9 @@
 name: CI Pipeline
 
 on:
-  push:
-    branches:
-      - '*' 
   pull_request:
     branches:
-      - '*' 
+      - CI/CD_branch  
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
@@ -26,36 +23,35 @@ jobs:
     name: Build and Tests
     runs-on: windows-latest
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.branch }}
-          fetch-depth: 0
+     - name: Checkout CI/CD_branch branch
+       uses: actions/checkout@v2
+       with:
+        ref: CI/CD_branch
           
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
+     - name: Setup .NET
+       uses: actions/setup-dotnet@v1
+       with:
           dotnet-version: '8.0'
       
-      - name: Run API tests
-        run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
-        continue-on-error: true
+     - name: Run API tests
+       run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
+       continue-on-error: true
         
-      - name: Run UI Tests (SpecFlow and Traditional Tests)
-        run: |
+     - name: Run UI Tests (SpecFlow and Traditional Tests)
+       run: |
           dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
           dotnet test --filter "FullyQualifiedName~Tests.TestsEpamPage" --logger "trx;LogFileName=UI_TestResults.trx"
-        continue-on-error: true
-        env:
+       continue-on-error: true
+       env:
            BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
            HEADLESS: ${{ github.event.inputs.headless || 'true' }}
 
-      - name: Publish Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-         name: test-results
-         path: |
+     - name: Publish Test Results
+       if: always()
+       uses: actions/upload-artifact@v4
+       with:
+        name: test-results
+        path: |
           **/TestResults
           **/Screenshots
           **/*.trx
