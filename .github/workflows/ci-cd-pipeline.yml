@@ -25,6 +25,8 @@ jobs:
     steps:
      - name: Checkout code
        uses: actions/checkout@v2
+       with:
+          ref: CI/CD_branch
         
      - name: Setup .NET
        uses: actions/setup-dotnet@v1
@@ -37,7 +39,7 @@ jobs:
         
      - name: Run UI Tests (SpecFlow and Traditional Tests)
        run: |
-          dotnet test ./SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
+          dotnet build SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
           dotnet test --filter "FullyQualifiedName~Tests.TestsEpamPage" --logger "trx;LogFileName=UI_TestResults.trx"
        continue-on-error: true
        env:
