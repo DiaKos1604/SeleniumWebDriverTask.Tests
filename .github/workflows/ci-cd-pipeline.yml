@@ -32,6 +32,9 @@ jobs:
        uses: actions/setup-dotnet@v1
        with:
           dotnet-version: '8.0'
+          
+     - name: Build Project SpecFlow
+       run: dotnet build SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --configuration Release
       
      - name: Run API tests
        run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
@@ -39,7 +42,7 @@ jobs:
         
      - name: Run UI Tests (SpecFlow and Traditional Tests)
        run: |
-          dotnet build SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
+          dotnet test SeleniumWebDriverTask.Tests/SeleniumWebDriverTask.Spec/SeleniumWebDriverTask.Spec.csproj --logger "trx;LogFileName=SpecFlow_UI_TestResults.trx"
           dotnet test --filter "FullyQualifiedName~Tests.TestsEpamPage" --logger "trx;LogFileName=UI_TestResults.trx"
        continue-on-error: true
        env:
