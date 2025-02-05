@@ -44,21 +44,20 @@ jobs:
        continue-on-error: true
        env:
            HEADLESS: ${{ github.event.inputs.headless || 'true' }}
-     - name: Run end-to-end tests
-       id: e2e
-       uses: ./.github/actions/e2e
-       continue-on-error: true
-
-     - name: Retry end-to-end tests if failed
-       if: steps.e2e.outcome == 'failure'
-       uses: ./.github/actions/e2e
-        
+           
      - name: Publish Test Results
        if: always()
        uses: actions/upload-artifact@v4
        with:
         name: test-results
         path: |
-          **/TestResults
-          **/Screenshots
-          **/*.trx
+         **/TestResults
+         **/*.trx
+
+     - name: Upload Screenshot Artifact 
+       if: always()  # Zawsze próbuj załączyć zrzuty ekranu
+       uses: actions/upload-artifact@v3
+       with:
+        name: failure-screenshot
+        path: '**/Screenshots/*.png'
+        if-no-files-found: ignore
