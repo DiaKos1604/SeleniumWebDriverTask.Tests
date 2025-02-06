@@ -34,7 +34,7 @@ jobs:
           dotnet-version: '8.0'
           
      - name: Build the solution
-       run: dotnet build --configuration Release    
+       run: dotnet build --no-restore --configuration Release    
         
      - name: Run API tests
        run: dotnet test --filter "Category=API" --logger "trx;LogFileName=API_TestResults.trx"
