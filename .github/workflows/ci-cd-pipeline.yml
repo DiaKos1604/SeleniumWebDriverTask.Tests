@@ -26,8 +26,11 @@ jobs:
      - name: Checkout code
        uses: actions/checkout@v2
        with:
-          ref: CI/CD_branch
-        
+         fetch-depth: 0
+
+     - name: Fetch all branches
+       run: git fetch --all
+
      - name: Setup .NET
        uses: actions/setup-dotnet@v1
        with:
