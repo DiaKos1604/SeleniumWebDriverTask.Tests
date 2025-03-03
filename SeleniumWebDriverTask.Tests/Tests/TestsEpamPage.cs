@@ -1,5 +1,5 @@
-﻿using SeleniumWebDriver.Business.Pages;
-using SeleniumWebDriver.Business.Services;
+﻿using SeleniumWebDriverTask.Business.Pages;
+using SeleniumWebDriverTask.Business.Services;
 using SeleniumWebDriverTask.Core.Utilities;
 
 namespace SeleniumWebDriverTask.Tests.Tests

@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Business.Pages;
+using SeleniumWebDriverTask.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
 
 namespace SeleniumWebDriverTask.Tests

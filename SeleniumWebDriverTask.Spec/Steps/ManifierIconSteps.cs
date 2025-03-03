@@ -1,10 +1,5 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Business.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SeleniumWebDriverTask.Business.Services;
 using TechTalk.SpecFlow;
 using Xunit;
 
