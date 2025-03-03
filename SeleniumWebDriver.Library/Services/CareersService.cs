@@ -1,75 +1,76 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Business.Pages;
+using SeleniumWebDriverTask.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
-using Serilog;
 
-namespace SeleniumWebDriver.Business.Services
+namespace SeleniumWebDriverTask.Business.Services
 {
     public class CareersService
     {
         private readonly CareersPage _page;
         private readonly IWebDriver _driver;
 
-        public CareersService(IWebDriver driver, TimeSpan timeout, ILogger logger)
+        public CareersService(IWebDriver driver)
         {
             _driver = driver;
-            _page = new CareersPage(driver, timeout, logger);
+            _page = new CareersPage(driver);
+        }
+        public IWebElement KeywordsField => _page._waitHelper.WaitForElementToBeClickable(_page.KeywordsFieldLocator);
+
+        private void ClickElement(By locator, string elementName)
+        {
+            LoggerHelper.LogInformation($"Attempting to click '{elementName}'.");
+            var element = _page._waitHelper.WaitForElementToBeClickable(locator);
+            new ActionsHelper(_driver).ClickElement(element);
+            LoggerHelper.LogInformation($"Successfully clicked '{elementName}'.");
         }
 
-        public IWebElement FindJobLink => _page._waitHelper.WaitForElementToBeClickable(_page.FindJobLinkLocator);
-        public IWebElement KeywordsField => _page._waitHelper.WaitForElementToBeClickable(_page.KeywordsFieldLocator);
-        public IWebElement LocationField => _page._waitHelper.WaitForElementToBeClickable(_page.LocationFieldLocator);
-        public IWebElement ChoiceLocation => _page._waitHelper.WaitForElementToBeClickable(_page.ChoiceLocationLocator);
-        public IWebElement RemoteOption => _page._waitHelper.WaitForElementToBeClickable(_page.RemoteOptionLocator);
-        public IWebElement FindButton => _page._waitHelper.WaitForElementToBeClickable(_page.FindButtonLocator);
+        private void EnterText(IWebElement element, string text, string elementName)
+        {
+            LoggerHelper.LogInformation($"Entering '{text}' into '{elementName}'.");
+            element.Clear();
+            element.SendKeys(text);
+            LoggerHelper.LogInformation($"Successfully entered '{text}' into '{elementName}'.");
+        }
+
+        public void ClickFindYourDreamJobLink()
+        {
+            ClickElement(_page.FindJobLinkLocator, "Find Your Dream Job Link");
+        }
 
         public void SearchJob(string programmingLanguage)
         {
-            LoggerHelper.LogInformation($"Initiating job search for programming language: {programmingLanguage}.");
+            LoggerHelper.LogInformation($"Starting job search for '{programmingLanguage}'.");
+           
+            EnterText(KeywordsField, programmingLanguage, "Keywords Field");
+            ClickElement(_page.LocationFieldLocator, "Location Field");
+            ClickElement(_page.ChoiceLocationLocator, "Choice Location");
+            ClickElement(_page.RemoteOptionLocator, "Remote Option");
+            ClickElement(_page.FindButtonLocator, "Find Button");
 
-            new ActionsHelper(_driver).ClickElement(FindJobLink);
-            LoggerHelper.LogInformation("Clicked on the 'Find Your Job' link.");
-
-            KeywordsField.Clear();
-            KeywordsField.SendKeys(programmingLanguage);
-            LocationField.Click();
-            LoggerHelper.LogInformation($"Entered programming language: {programmingLanguage} in the keywords field.");
-
-            ChoiceLocation.Click();
-            LoggerHelper.LogInformation("Selected the location from the dropdown.");
-
-            RemoteOption.Click();
-            LoggerHelper.LogInformation("Selected the 'Remote' option.");
-
-            FindButton.Click();
-            LoggerHelper.LogInformation("Clicked the 'Find' button to search for jobs.");
+            LoggerHelper.LogInformation("Job search completed.");
         }
 
-        public void GetDateLabel()
+        public void SelectSearchByDate()
         {
-            LoggerHelper.LogInformation("Attempting to select the 'Search by Date' option.");
-
-            var dateElement = _page._waitHelper.WaitForElementToBeClickable(By.CssSelector("label[for='sort-time']"));
-            new ActionsHelper(_driver).ClickElement(dateElement);
-            LoggerHelper.LogInformation("'Search by Date' option selected successfully.");
+            ClickElement(By.CssSelector("label[for='sort-time']"), "Search by Date Option");
         }
 
-        public void GetViewAndApplyButtonForLatestob()
+        public void ClickViewAndApplyForLatestJob()
         {
-            LoggerHelper.LogInformation("Retrieving the 'View and Apply' button for the latest job.");
+            LoggerHelper.LogInformation("Attempting to click 'View and Apply' for the latest job.");
+            _page._waitHelper.WaitForPageLoad();
 
-            _page._waitHelper.WaitForPageLoad(_driver);
-            var latestElement = _page._waitHelper.WaitForElementToBeClickable(By.XPath("//ul[@class='search-result__list']/li[position()=1]/descendant::a[text()='View and apply']"));
-            new ActionsHelper(_driver).ClickElement(latestElement);
-            LoggerHelper.LogInformation("'View and Apply' button for the latest job clicked successfully.");
+            ClickElement(By.XPath("//ul[@class='search-result__list']/li[position()=1]/descendant::a[text()='View and apply']"),
+                "View and Apply Button for Latest Job");
         }
 
         public bool IsProgrammingLangElementDisplayed(string programmingLanguage)
         {
-            LoggerHelper.LogInformation($"Checking if programming language '{programmingLanguage}' is displayed on the Careers page.");
+            LoggerHelper.LogInformation($"Checking for the presence of '{programmingLanguage}' on the Careers page.");
 
-            var programmingLangElements = _page._waitHelper.WaitForElementsToBePresent(By.XPath($"//*[contains(text(), '{programmingLanguage}')]"));
-            bool isDisplayed = programmingLangElements.Any();
+            var elements = _page._waitHelper.WaitForElementsToBePresent(By.XPath($"//*[contains(text(), '{programmingLanguage}')]"));
+            bool isDisplayed = elements.Any();
+
             LoggerHelper.LogInformation($"Programming language '{programmingLanguage}' is {(isDisplayed ? "displayed" : "not displayed")} on the Careers page.");
 
             return isDisplayed;

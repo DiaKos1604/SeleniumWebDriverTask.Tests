@@ -1,20 +1,19 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Business.Pages;
+using SeleniumWebDriverTask.Business.Pages;
 using SeleniumWebDriverTask.Core.Utilities;
-using Serilog;
 
 namespace SeleniumWebDriverTask.Tests
 {
     public abstract class TestBase : IDisposable
     {
         protected IWebDriver Driver;
-        protected ILogger Logger = Log.Logger;
 
         protected HomePage _homePage;
         protected CareersPage _careersPage;
         protected MagnifierIconPage _magnifierIconPage;
         protected AboutPage _aboutPage;
         protected InsightsPage _insightsPage;
+        protected ServicesSectionPage _servicesSectionPage;
 
         protected TestBase(WebDriverManager webDriverManager)
         {
@@ -23,17 +22,16 @@ namespace SeleniumWebDriverTask.Tests
                     ConfigurationHelper.GetHeadlessOption());
             LoggerHelper.LogInformation("TestBase initialized.");
 
-            _homePage = new HomePage(Driver, TimeSpan.FromSeconds(20), Logger);
-            _careersPage = new CareersPage(Driver, TimeSpan.FromSeconds(20), Logger);
-            _magnifierIconPage = new MagnifierIconPage(Driver, TimeSpan.FromSeconds(20), Logger);
-            _aboutPage = new AboutPage(Driver, TimeSpan.FromSeconds(20), Logger);
-            _insightsPage = new InsightsPage(Driver, TimeSpan.FromSeconds(20), Logger);
+            _homePage = new HomePage(Driver);
+            _careersPage = new CareersPage(Driver);
+            _magnifierIconPage = new MagnifierIconPage(Driver);
+            _aboutPage = new AboutPage(Driver);
+            _insightsPage = new InsightsPage(Driver);
+            _servicesSectionPage = new ServicesSectionPage(Driver);
         }
 
         public void Dispose()
         {
-            ScreenshotMaker.TakeBrowserScreenshot((ITakesScreenshot)Driver, "TestFailure");
-
             LoggerHelper.LogInformation("Disposing TestBase and quitting WebDriver.");
             WebDriverManager.Instance().QuitDriver();
 

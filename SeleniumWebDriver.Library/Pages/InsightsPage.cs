@@ -1,11 +1,10 @@
 ﻿using OpenQA.Selenium;
-using Serilog;
 
-namespace SeleniumWebDriver.Business.Pages
+namespace SeleniumWebDriverTask.Business.Pages
 {
     public class InsightsPage : BasePage
     {
-        public InsightsPage(IWebDriver driver, TimeSpan timeout, ILogger logger) : base(driver, timeout, logger)
+        public InsightsPage(IWebDriver driver) : base(driver)
         {
         }
 

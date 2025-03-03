@@ -1,24 +1,26 @@
 ﻿using OpenQA.Selenium;
 using Serilog;
 
-public class NavigationService
+namespace SeleniumWebDriverTask.Business.Services
 {
-    private readonly IWebDriver _driver;
-    private readonly ILogger _logger;
-
-    public NavigationService(IWebDriver driver, ILogger logger)
+    public class NavigationService
     {
-        _driver = driver ?? throw new ArgumentNullException(nameof(driver));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+        private readonly IWebDriver _driver;
 
-    public void GoToPage(string url)
-    {
-        if (string.IsNullOrWhiteSpace(url))
+        public NavigationService(IWebDriver driver)
         {
-            throw new ArgumentException("URL cannot be null or empty.", nameof(url));
+            _driver = driver ?? throw new ArgumentNullException(nameof(driver));
         }
-        _logger.Information($"Navigating to {url}");
-        _driver.Navigate().GoToUrl(url);
+
+        public void GoToPage(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentException("URL cannot be null or empty.", nameof(url));
+            }
+
+            Log.Logger.Information($"Navigating to {url}");
+            _driver.Navigate().GoToUrl(url);
+        }
     }
 }
