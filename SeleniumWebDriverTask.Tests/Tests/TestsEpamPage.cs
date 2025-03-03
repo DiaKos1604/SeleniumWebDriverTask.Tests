@@ -1,6 +1,7 @@
-﻿using SeleniumWebDriver.Business.Pages;
-using SeleniumWebDriver.Business.Services;
+﻿using SeleniumWebDriverTask.Business.Pages;
+using SeleniumWebDriverTask.Business.Services;
 using SeleniumWebDriverTask.Core.Utilities;
+using System.ComponentModel;
 
 namespace SeleniumWebDriverTask.Tests.Tests
 {
@@ -9,30 +10,30 @@ namespace SeleniumWebDriverTask.Tests.Tests
         private readonly NavigationService _navigationService;
         public TestsEpamPage() : base(WebDriverManager.Instance())
         {
-            _navigationService = new NavigationService(Driver);
+            _navigationService = new NavigationService(_driver);
         }
 
-        [Fact]
+        [Fact, Category("UI")]
         public void ValidateHomePage()
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateHomePage)}.");
-            _navigationService.GoToPage(HomePage.Url);
+            _navigationService.GoToPage();
 
-            var homeService = new HomeService(Driver);
+            var homeService = new HomeService(_driver);
             homeService.ValidateNavigationElementsExist();
         }
 
-        [Theory]
+        [Theory, Category("UI")]
         [InlineData("C#")]
         public void ValidateJobSearch(string programmingLanguage)
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateJobSearch)}.");
-            _navigationService.GoToPage(HomePage.Url);
+            _navigationService.GoToPage();
 
-            var homeService = new HomeService(Driver);
+            var homeService = new HomeService(_driver);
             homeService.ClickCareersLink();
 
-            var careersService = new CareersService(Driver);
+            var careersService = new CareersService(_driver);
             careersService.ClickFindYourDreamJobLink();
             careersService.SearchJob(programmingLanguage);
             careersService.SelectSearchByDate();
@@ -43,14 +44,15 @@ namespace SeleniumWebDriverTask.Tests.Tests
             Assert.True(programingLangElement, $"The programming language for element {programmingLanguage} is not displayed on the Careers page.");
         }
 
-        [Theory]
+        [Theory, Category("UI")]
         [InlineData("Cloud")]
         public void ValidateMagnifierIcon(string searchTerm)
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateMagnifierIcon)}.");
-            _navigationService.GoToPage(HomePage.Url);
+            _navigationService.GoToPage();
 
-            var magnifierIconService = new MagnifierIconService(Driver);
+            var magnifierIconService = new MagnifierIconService(_driver);
+            magnifierIconService.ClickMagnifierIcon();
             magnifierIconService.EnterSearchTerm(searchTerm);
             magnifierIconService.ClickFindButton();
 
@@ -59,16 +61,16 @@ namespace SeleniumWebDriverTask.Tests.Tests
             Assert.True(searchResultsDisplayed, $"Search results for '{searchTerm}' are not displayed on the search page.");
         }
 
-        [Fact]
+        [Fact, Category("UI")]
         public void IsFileDownloaded()
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(IsFileDownloaded)}.");
-            _navigationService.GoToPage(HomePage.Url);
+            _navigationService.GoToPage();
 
-            var homeService = new HomeService(Driver);
+            var homeService = new HomeService(_driver);
             homeService.ClickAboutLink();
 
-            var aboutService = new AboutService(Driver);
+            var aboutService = new AboutService(_driver);
             aboutService.ClickDownloadButton();
 
             var expectedFileName = "EPAM_Corporate_Overview_Q4_EOY.pdf";
@@ -77,16 +79,16 @@ namespace SeleniumWebDriverTask.Tests.Tests
             Assert.True(actualFileDownloaded, $"The expected file '{expectedFileName}' was not downloaded.");
         }
 
-        [Fact]
+        [Fact, Category("UI")]
         public void ValidateInsightsPage()
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateInsightsPage)}.");
-            _navigationService.GoToPage(HomePage.Url);
+            _navigationService.GoToPage();
 
-            var homeService = new HomeService(Driver);
+            var homeService = new HomeService(_driver);
             homeService.ClickInsightsLink();
 
-            var insightsService = new InsightsService(Driver);
+            var insightsService = new InsightsService(_driver);
             insightsService.MoveToSlider();
             insightsService.SwipeCarousel(2);
 
@@ -99,18 +101,18 @@ namespace SeleniumWebDriverTask.Tests.Tests
             Assert.True(isCorrectArticle, $"The article title: {articleTitle} not matches the previously noted title.");
         }
 
-        [Theory]
+        [Theory, Category("UI")]
         [InlineData("Generative AI")]
         [InlineData("Responsible AI")]
         public void ValidateNavigationToGenerativeAI(string serviceCategory)
         {
             LoggerHelper.LogInformation($"Starting test: {nameof(ValidateNavigationToGenerativeAI)}.");
 
-            _navigationService.GoToPage(HomePage.Url);
-            var homeService = new HomeService(Driver);
+            _navigationService.GoToPage();
+            var homeService = new HomeService(_driver);
             homeService.ClickServicesLink();
 
-            var servicesSectionService = new ServicesSectionService(Driver);
+            var servicesSectionService = new ServicesSectionService(_driver);
             servicesSectionService.MoveToAILink();
             servicesSectionService.StopVideo();
             servicesSectionService.SelectCategory(serviceCategory);

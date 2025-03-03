@@ -18,9 +18,9 @@ namespace SeleniumWebDriverTask.Core.Utilities
                 .CreateLogger();
         }
 
-        public static void LogError(Exception ex, string message)
+        public static void LogError(string message)
         {
-            Logger.Error(ex, message);
+            Logger.Error(message);
         }
 
         public static void LogInformation(string message)

@@ -61,6 +61,7 @@ namespace SeleniumWebDriverTask.Core.Utilities
                 options.AddArgument("--disable-extensions");
                 options.AddArgument("--window-size=1920x1080");
                 options.AddArgument("--incognito");
+                options.AddArgument("--disable-dev-shm-usage");
 
                 LoggerHelper.LogInformation("All headless options configured.");
             }

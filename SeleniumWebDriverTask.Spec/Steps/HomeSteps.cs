@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
-using SeleniumWebDriver.Business.Pages;
-using SeleniumWebDriver.Business.Services;
+using SeleniumWebDriverTask.Business.Pages;
+using SeleniumWebDriverTask.Business.Services;
 using TechTalk.SpecFlow;
 
 namespace SeleniumWebDriverTask.Spec.Steps
@@ -22,7 +22,7 @@ namespace SeleniumWebDriverTask.Spec.Steps
         [Given(@"The user is on the EPAM home page")]
         public void GivenTheUserIsOnTheEPAMHomePage()
         {
-            _navigationService.GoToPage(HomePage.Url);
+            _navigationService.GoToPage();
         }
 
         [Then(@"The user validate navigation to main tabs")]

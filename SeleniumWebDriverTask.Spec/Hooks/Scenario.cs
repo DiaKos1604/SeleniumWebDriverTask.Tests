@@ -23,9 +23,10 @@ namespace SeleniumWebDriverTask.Spec.Hooks
             var browserType = ConfigurationHelper.GetBrowserType();
             var headless = ConfigurationHelper.GetHeadlessOption();
             var driver = WebDriverManager.Instance().GetWebDriver(browserType, headless);
-
+            
             _scenarioContext["WebDriver"] = driver;
             _scenarioContext.Set(driver, typeof(IWebDriver).FullName);
+            LoggerHelper.LogInformation("Before Scenario");
         }
 
         [AfterScenario]
@@ -33,9 +34,15 @@ namespace SeleniumWebDriverTask.Spec.Hooks
         {
             int threadId = Thread.CurrentThread.ManagedThreadId;
             Console.WriteLine($"AfterScenario on Thread ID: {threadId}");
+            LoggerHelper.LogInformation("After Scenario");
 
             if (_scenarioContext["WebDriver"] is IWebDriver driver)
             {
+                if (SpecFlowContext.Equals != null)
+                {
+                    LoggerHelper.LogInformation($"Scenario failed: {_scenarioContext.ScenarioInfo.Title}. Taking screenshot.");
+                    ScreenshotMaker.TakeBrowserScreenshot((ITakesScreenshot)driver, "TestFailure");
+                }
                 driver.Quit();
             }
             else
